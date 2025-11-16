@@ -1,0 +1,20 @@
+Bonjour,
+
+Pour accéder à la documentation de l'API, l'équipe frontend peut utiliser les outils intégrés de FastAPI directement depuis l'application en cours d'exécution.
+
+Une fois que le serveur backend est démarré (par exemple, avec `uvicorn app.main:app --host 0.0.0.0 --port 8000`), vous pouvez accéder à la documentation interactive via votre navigateur :
+
+1.  **Swagger UI (interface interactive) :**
+    *   Ouvrez votre navigateur et allez à l'adresse : `http://localhost:8000/docs`
+    *   Cette interface vous permet de visualiser tous les endpoints, leurs descriptions, les modèles de données attendus (request body) et les réponses possibles. Vous pouvez même tester les endpoints directement depuis cette interface.
+
+2.  **ReDoc (documentation plus compacte) :**
+    *   Ouvrez votre navigateur et allez à l'adresse : `http://localhost:8000/redoc`
+    *   Ceci fournit une vue plus axée sur la lecture de la documentation de l'API.
+
+3.  **Spécification OpenAPI (format JSON) :**
+    *   Si vous avez besoin du fichier de spécification OpenAPI brut (au format JSON) pour générer du code client ou pour d'autres outils, vous pouvez le télécharger ici : `http://localhost:8000/openapi.json`
+
+J'ai abandonné la tentative de générer un fichier Markdown statique (`generate_docs.py`) en raison de problèmes techniques persistants. Les outils intégrés de FastAPI sont plus fiables et à jour avec l'état actuel de l'API.
+
+N'hésitez pas si vous avez d'autres questions.
