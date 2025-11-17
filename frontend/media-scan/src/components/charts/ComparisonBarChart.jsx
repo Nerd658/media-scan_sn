@@ -7,13 +7,13 @@ const ComparisonBarChart = ({ mediaToCompare }) => {
   }
 
   // Get all theme names
-  const themeNames = [...new Set(mediaToCompare.flatMap(media => Object.keys(media.repartition_themes)))];
+  const themeNames = [...new Set(mediaToCompare.flatMap(media => Object.keys(media.themes)))];
 
   // Prepare data for the chart
   const chartData = themeNames.map(theme => {
     const themeData = { name: theme };
     mediaToCompare.forEach(media => {
-      themeData[media.name] = media.repartition_themes[theme] || 0;
+      themeData[media.name] = media.themes[theme] || 0;
     });
     return themeData;
   });

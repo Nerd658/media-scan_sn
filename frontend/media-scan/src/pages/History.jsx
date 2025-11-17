@@ -15,9 +15,9 @@ export default function History() {
     const fetchTrends = async () => {
       try {
         setLoading(true);
-        const response = await fetch('/data/monitoring_trends.json');
+        const response = await fetch('http://localhost:8000/api/v1/dashboard/trends');
         if (!response.ok) {
-          throw new Error('Failed to fetch trends data');
+          throw new Error('Failed to fetch trends data from API');
         }
         const data = await response.json();
         setTrendsData(data);

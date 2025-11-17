@@ -1,20 +1,62 @@
 import { useState, useEffect } from "react";
-import { mediaDetails as mockMediaDetails } from "../data/mediaDetails";
 import ComparisonTable from "../components/ComparisonTable";
 import ComparisonBarChart from "../components/charts/ComparisonBarChart";
 
 export default function MediaComparison() {
-  const mediaNames = Object.keys(mockMediaDetails); // Use mock data for initial media names
+  const [allMediaNames, setAllMediaNames] = useState([]);
   const [selectedMedia, setSelectedMedia] = useState([]);
   const [mediaToCompare, setMediaToCompare] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
+  // Fetch all available media names initially
   useEffect(() => {
-    // Simulate fetching data based on selected media
-    if (selectedMedia.length === 0) {
-      setMediaToCompare([]);
-      return;
-    }
-    setMediaToCompare(selectedMedia.map(name => mockMediaDetails[name]));
+    const fetchAllMediaNames = async () => {
+      try {
+        const response = await fetch('http://localhost:8000/api/v1/dashboard/influence-ranking');
+        if (!response.ok) {
+          throw new Error('Failed to fetch media names');
+        }
+        const data = await response.json();
+        setAllMediaNames(data.map(media => media.media));
+      } catch (err) {
+        console.error("Error fetching all media names:", err);
+        setError("Impossible de charger la liste des médias.");
+      }
+    };
+    fetchAllMediaNames();
+  }, []);
+
+  // Fetch details for selected media
+  useEffect(() => {
+    const fetchMediaToCompare = async () => {
+      if (selectedMedia.length === 0) {
+        setMediaToCompare([]);
+        setLoading(false);
+        return;
+      }
+
+      setLoading(true);
+      setError(null);
+      try {
+        const queryParams = new URLSearchParams();
+        selectedMedia.forEach(name => queryParams.append('media_names', name));
+        
+        const response = await fetch(`http://localhost:8000/api/v1/dashboard/media/compare?${queryParams.toString()}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch comparison data');
+        }
+        const data = await response.json();
+        setMediaToCompare(data);
+      } catch (err) {
+        setError(err.message);
+        console.error("Error fetching media to compare:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMediaToCompare();
   }, [selectedMedia]);
 
   const handleMediaSelection = (e) => {
@@ -25,6 +67,14 @@ export default function MediaComparison() {
       setSelectedMedia((prev) => prev.filter((media) => media !== value));
     }
   };
+
+  if (loading && selectedMedia.length > 0) {
+    return <div className="text-center py-10">Chargement des données de comparaison...</div>;
+  }
+
+  if (error) {
+    return <div className="text-center py-10 text-red-500">Erreur: {error}</div>;
+  }
 
   return (
     <div>
@@ -39,7 +89,7 @@ export default function MediaComparison() {
       <div className="mb-6 p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Sélectionnez les médias à comparer :</h3>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {mediaNames.map((name) => (
+          {allMediaNames.map((name) => (
             <div key={name} className="flex items-center">
               <input
                 id={`checkbox-${name}`}

@@ -10,9 +10,9 @@ export default function AllMedia() {
     const fetchMedia = async () => {
       try {
         setLoading(true);
-        const response = await fetch('/data/influence_ranking.json');
+        const response = await fetch('http://localhost:8000/api/v1/dashboard/influence-ranking');
         if (!response.ok) {
-          throw new Error('Failed to fetch media data');
+          throw new Error('Failed to fetch media data from API');
         }
         const data = await response.json();
         setMediaList(data);

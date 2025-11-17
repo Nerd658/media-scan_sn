@@ -4,8 +4,8 @@ from sqlalchemy.orm import sessionmaker, declarative_base
 from fastapi import FastAPI
 from .config import settings
 
-# SQLAlchemy setup for PostgreSQL
-DATABASE_URL = settings.postgres_connection_string
+# SQLAlchemy setup for SQLite
+DATABASE_URL = settings.sqlite_database_url
 engine = create_async_engine(DATABASE_URL, echo=True)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine, class_=AsyncSession)
 Base = declarative_base()
@@ -16,17 +16,17 @@ async def get_db():
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    print("Connecting to PostgreSQL...")
+    print("Connecting to SQLite...")
     try:
         # Test connection and create tables
         async with engine.begin() as conn: # Use engine.begin() for an async transaction
             await conn.run_sync(Base.metadata.create_all) # Create tables if they don't exist
-        print("Successfully connected to PostgreSQL and ensured tables are created!")
+        print("Successfully connected to SQLite and ensured tables are created!")
     except Exception as e:
-        print(f"ERROR: Could not connect to PostgreSQL: {e}")
+        print(f"ERROR: Could not connect to SQLite: {e}")
         # Depending on the severity, you might want to re-raise or handle differently
         # raise e
 
     yield
 
-    print("PostgreSQL connection pool closed.")
+    print("SQLite connection pool closed.")

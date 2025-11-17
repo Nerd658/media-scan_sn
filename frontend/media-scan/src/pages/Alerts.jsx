@@ -10,45 +10,45 @@ export default function Alerts() {
     const fetchAlerts = async () => {
       try {
         setLoading(true);
-        const [monitoringRes, sensitiveRes] = await Promise.all([
-          fetch('/data/monitoring_alerts.json'),
-          fetch('/data/sensitive_alerts.json')
-        ]);
+        const response = await fetch('http://localhost:8000/api/v1/dashboard/alerts');
 
-        if (!monitoringRes.ok || !sensitiveRes.ok) {
-          throw new Error('Failed to fetch alerts data');
+        if (!response.ok) {
+          throw new Error('Failed to fetch alerts data from API');
         }
 
-        const monitoringAlerts = await monitoringRes.json();
-        const sensitiveAlerts = await sensitiveRes.json();
+        const combinedAlerts = await response.json();
 
-        // Process and add severity to monitoring alerts
-        const processedMonitoring = monitoringAlerts.map((alert, index) => ({
-          id: `mon-${index}`,
-          type: alert.type === 'pic_engagement' ? 'Pic d\'engagement' : 'Inactivité',
-          severity: 'Moyenne',
-          message: alert.message,
-          media: alert.media,
-          date: alert.date,
-          details: alert.post_link ? `Lien: ${alert.post_link}` : null,
-        }));
+        // Process the combined data to add severity and map fields for display
+        const processedAlerts = combinedAlerts.map((alert, index) => {
+          // Check if it's a sensitive alert by looking for a unique field like 'comment_text'
+          if (alert.comment_text) {
+            return {
+              id: `sen-${alert.comment_id || index}`,
+              type: `Contenu ${alert.true_category}`,
+              severity: 'Haute',
+              message: `"${alert.comment_text}"`,
+              media: alert.media_page,
+              date: new Date().toISOString(), // Placeholder date
+              details: `Score du modèle: ${alert.model_score.toFixed(2)}`,
+            };
+          } else {
+            // It's a monitoring alert
+            return {
+              id: `mon-${index}`,
+              type: alert.type === 'pic_engagement' ? 'Pic d\'engagement' : 'Inactivité',
+              severity: 'Moyenne',
+              message: alert.message,
+              media: alert.media,
+              date: alert.date,
+              details: alert.post_link ? `Lien: ${alert.post_link}` : null,
+            };
+          }
+        });
 
-        // Process and add severity to sensitive alerts
-        const processedSensitive = sensitiveAlerts.map((alert, index) => ({
-          id: `sen-${alert.comment_id || index}`,
-          type: `Contenu ${alert.true_category}`,
-          severity: 'Haute',
-          message: `"${alert.comment_text}"`,
-          media: alert.media_page,
-          date: new Date().toISOString(), // The sensitive_alerts.json file doesn't have a date, so we use current date as placeholder
-          details: `Score du modèle: ${alert.model_score.toFixed(2)}`,
-        }));
+        // Sort alerts by date
+        processedAlerts.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-        // Combine and sort alerts by date
-        const combined = [...processedMonitoring, ...processedSensitive];
-        combined.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-        setAllAlerts(combined);
+        setAllAlerts(processedAlerts);
         setError(null);
       } catch (err) {
         setError(err.message);

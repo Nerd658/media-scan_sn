@@ -30,17 +30,19 @@ export default function AnalysisDetails() {
       }
 
       try {
-        const response = await fetch('/data/sensitive_alerts.json');
+        let apiUrl = 'http://localhost:8000/api/v1/dashboard/alerts/sensitive';
+        if (statType === 'contenus-toxiques') {
+          apiUrl += '?category=toxic';
+        } else if (statType === 'contenu-sensible') {
+          // For 'contenu-sensible', we fetch all sensitive alerts
+          // No specific category filter needed, as the endpoint returns all sensitive alerts by default if no category is specified
+        }
+
+        const response = await fetch(apiUrl);
         if (!response.ok) {
-          throw new Error('Failed to fetch sensitive alerts data');
+          throw new Error('Failed to fetch sensitive alerts data from API');
         }
         let data = await response.json();
-
-        // Filter data based on the statType
-        if (statType === 'contenus-toxiques') {
-          data = data.filter(item => item.true_category === 'toxic');
-        }
-        // For 'contenu-sensible', we show all alerts from the file.
 
         // Map the data to the structure expected by the table
         const mappedData = data.map(item => ({
@@ -48,8 +50,8 @@ export default function AnalysisDetails() {
           text: item.comment_text,
           category: item.true_category, // Use category instead of sentiment
           source: item.media_page,
-          date: new Date().toISOString(), // Placeholder date
-          url: item.post_link || '#',
+          date: new Date().toISOString(), // Placeholder date if not available from API
+          url: item.post_link || '#', // Assuming post_link might be available or default to '#'
           score: item.model_score,
         }));
 

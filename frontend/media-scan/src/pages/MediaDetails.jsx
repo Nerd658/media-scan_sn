@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { mediaDetails as staticMediaDetails } from "../data/mediaDetails"; // For description
 import ThemeBarChart from "../components/charts/ThemeBarChart";
 
 export default function MediaDetails() {
@@ -15,42 +14,14 @@ export default function MediaDetails() {
     const fetchMediaDetails = async () => {
       try {
         setLoading(true);
-        const [rankingRes, themesRes] = await Promise.all([
-          fetch('/data/influence_ranking.json'),
-          fetch('/data/monitoring_themes_distribution.json')
-        ]);
+        const response = await fetch(`http://localhost:8000/api/v1/dashboard/media/${decodedMediaName}`);
 
-        if (!rankingRes.ok || !themesRes.ok) {
-          throw new Error('Failed to fetch media details data');
+        if (!response.ok) {
+          throw new Error('Failed to fetch media details data from API');
         }
 
-        const rankingData = await rankingRes.json();
-        const themesData = await themesRes.json();
-
-        // Find the specific media in the fetched data
-        const rankingInfo = rankingData.find(m => m.media === decodedMediaName);
-        const themeInfo = themesData.by_media[decodedMediaName];
-        const staticInfo = staticMediaDetails[decodedMediaName];
-
-        if (!rankingInfo) {
-          throw new Error(`Media "${decodedMediaName}" not found in ranking data.`);
-        }
-
-        // Combine all available data
-        const combinedData = {
-          name: decodedMediaName,
-          description: staticInfo ? staticInfo.description : "Description non disponible.",
-          scores: {
-            "Score d'Influence Total": rankingInfo.score_influence_total.toFixed(2),
-            "Score d'Audience": rankingInfo.audience_score.toFixed(2),
-            "Score d'Engagement": rankingInfo.engagement_score.toFixed(2),
-            "Score de Régularité": rankingInfo.regularity_score.toFixed(2),
-            "Score de Diversité": rankingInfo.diversity_score.toFixed(2),
-          },
-          themes: themeInfo || {},
-        };
-
-        setMediaData(combinedData);
+        const data = await response.json();
+        setMediaData(data);
         setError(null);
       } catch (err) {
         setError(err.message);

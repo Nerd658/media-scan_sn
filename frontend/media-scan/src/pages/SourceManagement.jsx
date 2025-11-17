@@ -10,9 +10,9 @@ export default function SourceManagement() {
     const fetchSources = async () => {
       try {
         setLoading(true);
-        const response = await fetch('/data/influence_ranking.json');
+        const response = await fetch('http://localhost:8000/api/v1/dashboard/influence-ranking');
         if (!response.ok) {
-          throw new Error('Failed to fetch sources data');
+          throw new Error('Failed to fetch sources data from API');
         }
         const data = await response.json();
         setSources(data);
@@ -76,13 +76,13 @@ export default function SourceManagement() {
                         </NavLink>
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-400">
-                        {source.score_influence_total.toFixed(2)}
+                        {typeof source.score_influence_total === 'number' ? source.score_influence_total.toFixed(2) : 'N/A'}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-400">
-                        {source.audience_score.toFixed(2)}
+                        {typeof source.audience_score === 'number' ? source.audience_score.toFixed(2) : 'N/A'}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-400">
-                        {source.engagement_score.toFixed(2)}
+                        {typeof source.engagement_score === 'number' ? source.engagement_score.toFixed(2) : 'N/A'}
                       </td>
                     </tr>
                   ))}

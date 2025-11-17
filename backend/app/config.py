@@ -1,9 +1,13 @@
 from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
-    postgres_connection_string: str = "postgresql+asyncpg://mediascan_user:bik123san@localhost:5432/mediascan_db"
-    secret_key: str = "your-super-secret-key"
-    algorithm: str = "HS256"
-    access_token_expire_minutes: int = 30
+    sqlite_database_url: str
+    mongo_connection_string: str
+    secret_key: str
+    algorithm: str
+    access_token_expire_minutes: int
+
+    class Config:
+        env_file = ".env"
 
 settings = Settings()

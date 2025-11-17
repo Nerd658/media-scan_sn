@@ -5,13 +5,14 @@ const ComparisonTable = ({ mediaToCompare }) => {
     return null;
   }
 
-  // Extract all unique metric keys from all media
+  // Define metrics based on the new data structure from MediaDetailsSchema
   const metrics = [
-    "Total Articles",
-    "Score d'Influence",
-    "Sentiment Positif",
-    "Sentiment Négatif",
-    "Sentiment Neutre",
+    "Score d'Influence Total",
+    "Score d'Audience",
+    "Score d'Engagement",
+    "Score de Régularité",
+    "Score de Diversité",
+    "Nombre de Thèmes Abordés",
   ];
 
   return (
@@ -50,17 +51,21 @@ const ComparisonTable = ({ mediaToCompare }) => {
 };
 
 const getMetricValue = (media, metric) => {
+  if (!media || !media.scores) return "N/A";
+
   switch (metric) {
-    case "Total Articles":
-      return media.total_articles;
-    case "Score d'Influence":
-      return media.score_influence;
-    case "Sentiment Positif":
-      return media.repartition_sentiments.positif;
-    case "Sentiment Négatif":
-      return media.repartition_sentiments.negatif;
-    case "Sentiment Neutre":
-      return media.repartition_sentiments.neutre;
+    case "Score d'Influence Total":
+      return media.scores["Score d'Influence Total"];
+    case "Score d'Audience":
+      return media.scores["Score d'Audience"];
+    case "Score d'Engagement":
+      return media.scores["Score d'Engagement"];
+    case "Score de Régularité":
+      return media.scores["Score de Régularité"];
+    case "Score de Diversité":
+      return media.scores["Score de Diversité"];
+    case "Nombre de Thèmes Abordés":
+      return media.themes ? Object.keys(media.themes).length : 0;
     default:
       return "N/A";
   }

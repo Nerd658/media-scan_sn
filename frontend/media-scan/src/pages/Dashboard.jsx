@@ -11,9 +11,6 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-// Note: The guided tour is temporarily disabled as it was tied to static IDs
-// that may not be present during loading states. It can be re-enabled later.
-
 export default function Dashboard() {
   const [dateRange, setDateRange] = useState([null, null]);
   const [startDate, endDate] = dateRange;
@@ -22,7 +19,7 @@ export default function Dashboard() {
   const [topMediaData, setTopMediaData] = useState(null);
   const [themeDistributionData, setThemeDistributionData] = useState(null);
   const [mainStats, setMainStats] = useState(null);
-  // Sentiment data is missing from the new source, so we won't load it for now.
+  // Sentiment data is still missing from the backend
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -32,50 +29,46 @@ export default function Dashboard() {
       try {
         setLoading(true);
 
-        // Fetch all necessary data in parallel
-        const [rankingRes, themesRes, sensitiveAlertsRes] = await Promise.all([
-          fetch('/data/influence_ranking.json'),
-          fetch('/data/monitoring_themes_distribution.json'),
-          fetch('/data/sensitive_alerts.json')
+        // Fetch all necessary data in parallel from the new API endpoints
+        const [rankingRes, themesRes, alertsRes] = await Promise.all([
+          fetch('http://localhost:8000/api/v1/dashboard/influence-ranking'),
+          fetch('http://localhost:8000/api/v1/dashboard/themes'),
+          fetch('http://localhost:8000/api/v1/dashboard/alerts')
         ]);
 
-        if (!rankingRes.ok || !themesRes.ok || !sensitiveAlertsRes.ok) {
-          throw new Error('Failed to fetch one or more data files');
+        if (!rankingRes.ok || !themesRes.ok || !alertsRes.ok) {
+          throw new Error('Failed to fetch dashboard data from API');
         }
 
         const rankingData = await rankingRes.json();
         const themesData = await themesRes.json();
-        const sensitiveAlertsData = await sensitiveAlertsRes.json();
+        const alertsData = await alertsRes.json();
 
         // --- Process Data for TopMediaTable ---
-        // 1. Calculate total articles per media from themes distribution
         const articlesPerMedia = {};
         for (const mediaName in themesData.by_media) {
           articlesPerMedia[mediaName] = Object.values(themesData.by_media[mediaName]).reduce((sum, count) => sum + count, 0);
         }
-
-        // 2. Merge ranking data with article counts
         const processedTopMedia = rankingData.map(media => ({
           name: media.media,
-          score: media.score_influence_total.toFixed(2), // Format the score
-          articles: articlesPerMedia[media.media] || 0, // Get calculated article count
+          score: media.score_influence_total.toFixed(2),
+          articles: articlesPerMedia[media.media] || 0,
         }));
         setTopMediaData(processedTopMedia);
 
-
         // --- Process Data for ThemeBarChart ---
-        // Transform the 'global' array into the key-value object the component expects
-        const processedThemes = themesData.global.reduce((acc, theme) => {
+        // Transform the 'global_themes' array into the key-value object the component expects
+        const processedThemes = themesData.global_themes.reduce((acc, theme) => {
           acc[theme.theme] = theme.count;
           return acc;
         }, {});
         setThemeDistributionData(processedThemes);
 
-
         // --- Process Data for Main Stats Grid ---
         const totalAnalyses = Object.values(articlesPerMedia).reduce((sum, count) => sum + count, 0);
-        const totalSensible = sensitiveAlertsData.length;
-        const totalToxiques = sensitiveAlertsData.filter(alert => alert.true_category === 'toxic').length;
+        const sensitiveAlerts = alertsData.filter(alert => alert.comment_text);
+        const totalSensible = sensitiveAlerts.length;
+        const totalToxiques = sensitiveAlerts.filter(alert => alert.true_category === 'toxic').length;
 
         setMainStats([
             { name: "Total Analyses", value: totalAnalyses, change: "12.5%", changeType: "increase" },
@@ -83,7 +76,6 @@ export default function Dashboard() {
             { name: "Contenu Sensible", value: totalSensible, change: "3.2%", changeType: "increase" },
             { name: "Sentiment Positif", value: 'N/A', change: "5.4%", changeType: "decrease" },
         ]);
-
 
         setError(null);
       } catch (err) {
@@ -132,7 +124,6 @@ export default function Dashboard() {
             placeholderText="Filtrer par date"
             className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           />
-          {/* Tour button can be re-added later */}
         </div>
       </div>
 
