@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .api import auth, analysis # Import analysis
+from .api import auth # Only auth remains
 from .db import lifespan # Import the new lifespan context manager
 
 app = FastAPI(
@@ -25,18 +25,3 @@ app.add_middleware(
 
 # Include API routers
 app.include_router(auth.router, prefix="/api/v1", tags=["Authentication"])
-app.include_router(analysis.router, prefix="/api/v1", tags=["AI Analysis"]) # Include analysis router
-
-@app.get("/health", tags=["Monitoring"])
-async def health_check():
-    return {"status": "ok"}
-
-@app.get("/metrics", tags=["Monitoring"])
-async def get_metrics():
-    # In a real application, this would return actual metrics
-    return {
-        "uptime": "X hours",
-        "requests_total": 12345,
-        "errors_total": 12,
-        "ai_api_calls_total": 567
-    }
