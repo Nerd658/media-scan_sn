@@ -9,9 +9,10 @@ import {
   MoonIcon,
   ArrowRightOnRectangleIcon, // Import for logout icon
 } from "@heroicons/react/24/outline";
-import { NavLink, useNavigate } from "react-router-dom"; // Import useNavigate
+import { NavLink } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
 import { useAuth } from "../context/AuthContext"; // Import useAuth
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 const navigation = [
   { name: "Dashboard", href: "/", icon: HomeIcon },
@@ -47,7 +48,7 @@ export default function Sidebar() {
         />
         <h1 className="text-2xl font-bold text-white">Media-Scan</h1>
       </div>
-      <nav className="flex flex-1 flex-col">
+      <nav id="sidebar-navigation" className="flex flex-1 flex-col">
         <ul role="list" className="flex flex-1 flex-col gap-y-7">
           <li>
             <ul role="list" className="-mx-2 space-y-1">
