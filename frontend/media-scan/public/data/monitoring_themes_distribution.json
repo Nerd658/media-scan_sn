@@ -1,0 +1,193 @@
+{
+    "global": [
+        {
+            "theme": "Autres",
+            "count": 572
+        },
+        {
+            "theme": "Social",
+            "count": 236
+        },
+        {
+            "theme": "Gouvernance",
+            "count": 223
+        },
+        {
+            "theme": "Économie",
+            "count": 152
+        },
+        {
+            "theme": "Humanitaire",
+            "count": 149
+        },
+        {
+            "theme": "Culture",
+            "count": 149
+        },
+        {
+            "theme": "Sport",
+            "count": 119
+        },
+        {
+            "theme": "Sécurité",
+            "count": 113
+        },
+        {
+            "theme": "Santé",
+            "count": 86
+        },
+        {
+            "theme": "Environnement",
+            "count": 67
+        },
+        {
+            "theme": "Politique",
+            "count": 54
+        },
+        {
+            "theme": "Justice",
+            "count": 52
+        },
+        {
+            "theme": "Diplomatie",
+            "count": 28
+        }
+    ],
+    "by_media": {
+        "AIB": {
+            "Autres": 105,
+            "Culture": 46,
+            "Diplomatie": 0,
+            "Environnement": 6,
+            "Gouvernance": 21,
+            "Humanitaire": 14,
+            "Justice": 3,
+            "Politique": 0,
+            "Santé": 13,
+            "Social": 16,
+            "Sport": 14,
+            "Sécurité": 7,
+            "Économie": 4
+        },
+        "BF1 TV": {
+            "Autres": 67,
+            "Culture": 25,
+            "Diplomatie": 1,
+            "Environnement": 9,
+            "Gouvernance": 13,
+            "Humanitaire": 13,
+            "Justice": 1,
+            "Politique": 2,
+            "Santé": 5,
+            "Social": 20,
+            "Sport": 8,
+            "Sécurité": 16,
+            "Économie": 12
+        },
+        "Burkina24": {
+            "Autres": 70,
+            "Culture": 14,
+            "Diplomatie": 2,
+            "Environnement": 8,
+            "Gouvernance": 30,
+            "Humanitaire": 23,
+            "Justice": 0,
+            "Politique": 2,
+            "Santé": 5,
+            "Social": 25,
+            "Sport": 8,
+            "Sécurité": 13,
+            "Économie": 12
+        },
+        "Libre Info": {
+            "Autres": 89,
+            "Culture": 16,
+            "Diplomatie": 3,
+            "Environnement": 9,
+            "Gouvernance": 21,
+            "Humanitaire": 18,
+            "Justice": 19,
+            "Politique": 14,
+            "Santé": 10,
+            "Social": 12,
+            "Sport": 30,
+            "Sécurité": 8,
+            "Économie": 43
+        },
+        "Minute.bf": {
+            "Autres": 66,
+            "Culture": 6,
+            "Diplomatie": 4,
+            "Environnement": 5,
+            "Gouvernance": 30,
+            "Humanitaire": 19,
+            "Justice": 2,
+            "Politique": 12,
+            "Santé": 10,
+            "Social": 63,
+            "Sport": 11,
+            "Sécurité": 36,
+            "Économie": 14
+        },
+        "Parlons de Tout": {
+            "Autres": 41,
+            "Culture": 7,
+            "Diplomatie": 3,
+            "Environnement": 6,
+            "Gouvernance": 33,
+            "Humanitaire": 25,
+            "Justice": 1,
+            "Politique": 1,
+            "Santé": 3,
+            "Social": 37,
+            "Sport": 9,
+            "Sécurité": 3,
+            "Économie": 1
+        },
+        "RTB": {
+            "Autres": 38,
+            "Culture": 27,
+            "Diplomatie": 2,
+            "Environnement": 7,
+            "Gouvernance": 22,
+            "Humanitaire": 9,
+            "Justice": 1,
+            "Politique": 9,
+            "Santé": 4,
+            "Social": 19,
+            "Sport": 14,
+            "Sécurité": 8,
+            "Économie": 14
+        },
+        "Radars Info Burkina": {
+            "Autres": 34,
+            "Culture": 3,
+            "Diplomatie": 12,
+            "Environnement": 5,
+            "Gouvernance": 34,
+            "Humanitaire": 18,
+            "Justice": 6,
+            "Politique": 13,
+            "Santé": 33,
+            "Social": 25,
+            "Sport": 10,
+            "Sécurité": 16,
+            "Économie": 37
+        },
+        "Sidwaya": {
+            "Autres": 62,
+            "Culture": 5,
+            "Diplomatie": 1,
+            "Environnement": 12,
+            "Gouvernance": 19,
+            "Humanitaire": 10,
+            "Justice": 19,
+            "Politique": 1,
+            "Santé": 3,
+            "Social": 19,
+            "Sport": 15,
+            "Sécurité": 6,
+            "Économie": 15
+        }
+    }
+}

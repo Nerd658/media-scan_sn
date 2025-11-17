@@ -1,8 +1,65 @@
-import { useState } from "react";
-import { alerts as allAlerts } from "../data/alerts";
+import { useState, useEffect } from "react";
 
 export default function Alerts() {
   const [filterSeverity, setFilterSeverity] = useState("Toutes");
+  const [allAlerts, setAllAlerts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchAlerts = async () => {
+      try {
+        setLoading(true);
+        const [monitoringRes, sensitiveRes] = await Promise.all([
+          fetch('/data/monitoring_alerts.json'),
+          fetch('/data/sensitive_alerts.json')
+        ]);
+
+        if (!monitoringRes.ok || !sensitiveRes.ok) {
+          throw new Error('Failed to fetch alerts data');
+        }
+
+        const monitoringAlerts = await monitoringRes.json();
+        const sensitiveAlerts = await sensitiveRes.json();
+
+        // Process and add severity to monitoring alerts
+        const processedMonitoring = monitoringAlerts.map((alert, index) => ({
+          id: `mon-${index}`,
+          type: alert.type === 'pic_engagement' ? 'Pic d\'engagement' : 'Inactivité',
+          severity: 'Moyenne',
+          message: alert.message,
+          media: alert.media,
+          date: alert.date,
+          details: alert.post_link ? `Lien: ${alert.post_link}` : null,
+        }));
+
+        // Process and add severity to sensitive alerts
+        const processedSensitive = sensitiveAlerts.map((alert, index) => ({
+          id: `sen-${alert.comment_id || index}`,
+          type: `Contenu ${alert.true_category}`,
+          severity: 'Haute',
+          message: `"${alert.comment_text}"`,
+          media: alert.media_page,
+          date: new Date().toISOString(), // The sensitive_alerts.json file doesn't have a date, so we use current date as placeholder
+          details: `Score du modèle: ${alert.model_score.toFixed(2)}`,
+        }));
+
+        // Combine and sort alerts by date
+        const combined = [...processedMonitoring, ...processedSensitive];
+        combined.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        setAllAlerts(combined);
+        setError(null);
+      } catch (err) {
+        setError(err.message);
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAlerts();
+  }, []);
 
   const filteredAlerts = allAlerts.filter((alert) => {
     if (filterSeverity === "Toutes") return true;
@@ -14,6 +71,14 @@ export default function Alerts() {
     Moyenne: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
     Faible: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200",
   };
+
+  if (loading) {
+    return <div className="text-center py-10">Chargement des alertes...</div>;
+  }
+
+  if (error) {
+    return <div className="text-center py-10 text-red-500">Erreur: {error}</div>;
+  }
 
   return (
     <div>

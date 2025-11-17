@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { mediaDetails as mockMediaDetails } from "../data/mediaDetails";
-import SentimentPieChart from "../components/charts/SentimentPieChart";
-import ThemeBarChart from "../components/charts/ThemeBarChart";
+import ComparisonTable from "../components/ComparisonTable";
+import ComparisonBarChart from "../components/charts/ComparisonBarChart";
 
 export default function MediaComparison() {
   const mediaNames = Object.keys(mockMediaDetails); // Use mock data for initial media names
@@ -59,33 +59,14 @@ export default function MediaComparison() {
       </div>
 
       {/* Comparison Display */}
-      {mediaToCompare.length === 0 && selectedMedia.length > 0 && (
-        <div className="text-center py-10 text-gray-500 dark:text-gray-400">
-          Aucune donnée de comparaison disponible pour les médias sélectionnés.
+      {mediaToCompare.length > 0 ? (
+        <div className="space-y-8">
+          <ComparisonTable mediaToCompare={mediaToCompare} />
+          <ComparisonBarChart mediaToCompare={mediaToCompare} />
         </div>
-      )}
-      {mediaToCompare.length > 0 && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {mediaToCompare.map((media) => (
-            <div key={media.name} className="bg-white dark:bg-gray-800 shadow overflow-hidden sm:rounded-lg p-6">
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">{media.name}</h2>
-              <dl className="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2 mb-6">
-                <div>
-                  <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Articles Analysés</dt>
-                  <dd className="mt-1 text-lg text-gray-900 dark:text-white">{media.total_articles}</dd>
-                </div>
-                <div>
-                  <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Score d'Influence</dt>
-                  <dd className="mt-1 text-lg text-gray-900 dark:text-white">{media.score_influence}</dd>
-                </div>
-              </dl>
-
-              <div className="grid grid-cols-1 gap-4">
-                <SentimentPieChart data={media.repartition_sentiments} />
-                <ThemeBarChart data={media.repartition_themes} />
-              </div>
-            </div>
-          ))}
+      ) : (
+        <div className="text-center py-10 text-gray-500 dark:text-gray-400">
+          Veuillez sélectionner au moins un média pour voir la comparaison.
         </div>
       )}
     </div>
