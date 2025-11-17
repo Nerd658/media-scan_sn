@@ -1,3 +1,4 @@
+import { NavLink } from "react-router-dom";
 import { stats } from "../data/stats";
 import { ArrowUpIcon } from "@heroicons/react/20/solid";
 import SentimentPieChart from "../components/charts/SentimentPieChart";
@@ -12,8 +13,20 @@ export default function Dashboard() {
   const mainStats = [
     { name: "Total Analyses", value: stats.total_analyses, change: "12.5%", changeType: "increase" },
     { name: "Contenus Toxiques", value: stats.total_toxiques, change: "2.8%", changeType: "increase" },
+    { name: "Contenu Sensible", value: stats.total_sensibles, change: "3.2%", changeType: "increase" },
     { name: "Sentiment Positif", value: stats.repartition_sentiments.positif, change: "5.4%", changeType: "decrease" },
   ];
+
+  const slugify = (text) => {
+    return text
+      .toString()
+            .toLowerCase()
+      .replace(/\s+/g, '-')           // Replace spaces with -
+      .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
+      .replace(/\-\-+/g, '-')         // Replace multiple - with single -
+      .replace(/^-+/, '')             // Trim - from start of text
+      .replace(/-+$/, '');            // Trim - from end of text
+  };
 
   return (
     <div>
@@ -26,7 +39,7 @@ export default function Dashboard() {
 
       {/* Stats Grid */}
       <div className="mb-8">
-        <dl className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <dl className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {mainStats.map((item) => (
             <div
               key={item.name}
@@ -55,9 +68,12 @@ export default function Dashboard() {
                 </p>
                 <div className="absolute inset-x-0 bottom-0 bg-gray-50 dark:bg-gray-700/50 px-4 py-4 sm:px-6">
                   <div className="text-sm">
-                    <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300">
+                    <NavLink
+                      to={`/analysis/${slugify(item.name)}`}
+                      className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300"
+                    >
                       Voir tout<span className="sr-only"> {item.name} stats</span>
-                    </a>
+                    </NavLink>
                   </div>
                 </div>
               </dd>

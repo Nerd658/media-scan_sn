@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import { ThemeProvider } from "./context/ThemeContext";
+import { AuthProvider } from "./context/AuthContext";
 import Layout from "./components/Layout";
 import Dashboard from "./pages/Dashboard";
 import History from "./pages/History";
@@ -11,9 +12,20 @@ import MediaDetails from "./pages/MediaDetails";
 import Alerts from "./pages/Alerts";
 import MediaComparison from "./pages/MediaComparison";
 import SourceManagement from "./pages/SourceManagement";
-import AllMedia from "./pages/AllMedia"; // Import the new component
+import AllMedia from "./pages/AllMedia";
+import AnalysisDetails from "./pages/AnalysisDetails";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
 
 const router = createBrowserRouter([
+  {
+    path: "/login",
+    element: <LoginPage />,
+  },
+  {
+    path: "/register",
+    element: <RegisterPage />,
+  },
   {
     path: "/",
     element: <Layout />,
@@ -47,8 +59,12 @@ const router = createBrowserRouter([
         element: <SourceManagement />,
       },
       {
-        path: "/all-media", // New route for all media
+        path: "/all-media",
         element: <AllMedia />,
+      },
+      {
+        path: "/analysis/:statType",
+        element: <AnalysisDetails />,
       },
     ],
   },
@@ -57,7 +73,9 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <ThemeProvider>
-      <RouterProvider router={router} />
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
     </ThemeProvider>
   </StrictMode>
 );

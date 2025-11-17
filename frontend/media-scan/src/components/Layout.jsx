@@ -2,10 +2,26 @@ import { useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Sidebar from "./Sidebar";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 export default function Layout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { user, loading, isAuthenticated, logout } = useAuth();
+  const navigate = useNavigate();
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
+        <p className="text-lg text-gray-700 dark:text-gray-300">Chargement de l'authentification...</p>
+      </div>
+    );
+  }
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   return (
     <div className="bg-gray-100 dark:bg-gray-900 min-h-screen">
@@ -69,6 +85,33 @@ export default function Layout() {
             <Bars3Icon className="h-6 w-6" aria-hidden="true" />
           </button>
           <div className="flex-1 text-sm font-semibold leading-6 text-gray-900 dark:text-white">Dashboard</div>
+
+          {/* User / Auth section */}
+          <div className="flex items-center gap-x-4">
+            {isAuthenticated ? (
+              <>
+                <img
+                  className="h-8 w-8 rounded-full bg-gray-50"
+                  src={user.avatarUrl}
+                  alt=""
+                />
+                <span className="text-sm font-semibold leading-6 text-gray-900 dark:text-white">{user.name}</span>
+                <button
+                  onClick={handleLogout}
+                  className="ml-4 px-3 py-1.5 text-sm font-semibold leading-6 text-white bg-indigo-600 rounded-md shadow-sm hover:bg-indigo-500"
+                >
+                  Déconnexion
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={() => navigate('/login')}
+                className="px-3 py-1.5 text-sm font-semibold leading-6 text-white bg-indigo-600 rounded-md shadow-sm hover:bg-indigo-500"
+              >
+                Connexion
+              </button>
+            )}
+          </div>
         </div>
 
         <main className="py-10">

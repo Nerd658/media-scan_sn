@@ -1,6 +1,7 @@
 export const stats = {
   total_analyses: 1256,
   total_toxiques: 87,
+  total_sensibles: 42,
   repartition_sentiments: {
     positif: 450,
     negatif: 150,
