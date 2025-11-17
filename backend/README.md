@@ -1,136 +1,109 @@
-# Media-Scan Backend Application
+# Media-Scan Backend
 
 ## Description
-Ceci est l'application backend pour le projet Media-Scan, construite avec FastAPI. Elle fournit les services d'authentification pour les utilisateurs (connexion et inscription) et sert de base pour d'éventuelles extensions futures liées à l'analyse et au monitoring des médias.
+Ceci est l'application backend pour le projet Media-Scan. Construite avec FastAPI, elle a deux rôles principaux :
+1.  **Fournir les services d'authentification** pour les utilisateurs (inscription, connexion) via une base de données **SQLite**.
+2.  **Servir les données d'analyse des médias** (scores d'influence, alertes, tendances, etc.) depuis une base de données **MongoDB**.
 
-## Technologies Clés Utilisées
-*   **Framework:** FastAPI
-*   **Serveur ASGI:** Uvicorn
-*   **Base de Données:** PostgreSQL
-*   **ORM (Object-Relational Mapper):** SQLAlchemy (avec extension AsyncIO)
-*   **Hachage de Mots de Passe:** `bcrypt`
-*   **Tokens JWT:** `python-jose`
-*   **Validation de Données/Paramètres:** Pydantic
-*   **Gestion des Variables d'Environnement:** Pydantic-Settings
-*   **Client HTTP Asynchrone:** `httpx` (actuellement non utilisé après nettoyage, mais utile pour les services externes)
+L'API est conçue pour être consommée par le frontend React de Media-Scan.
 
-## Aperçu de la Structure du Projet
-Le projet backend est organisé de manière modulaire :
+## Technologies Clés
+*   **Framework**: FastAPI
+*   **Serveur ASGI**: Uvicorn
+*   **Bases de Données**:
+    *   **SQLite** pour l'authentification des utilisateurs (via SQLAlchemy).
+    *   **MongoDB** pour les données de l'application (via Motor).
+*   **ORM / ODM**: SQLAlchemy (AsyncIO) et Motor (AsyncIO).
+*   **Validation de Données**: Pydantic.
+*   **Authentification**: Tokens JWT (via `python-jose`) avec `OAuth2PasswordBearer`.
+*   **Gestion de l'Environnement**: Pydantic-Settings.
 
-*   **`app/`**: Le répertoire principal du code source de l'application FastAPI.
-    *   **`api/`**: Contient les définitions des routes (endpoints) de l'API.
-        *   `auth.py`: Gère les routes d'authentification (inscription, connexion, informations utilisateur).
-    *   **`core/`**: Contient les fonctionnalités de base et les utilitaires.
-        *   `security.py`: Fonctions pour le hachage des mots de passe et la création/vérification des tokens JWT.
-    *   **`db/`**: Gère la connexion à la base de données.
-        *   `db.py`: Configuration de SQLAlchemy, moteur de base de données, session et gestion du cycle de vie (lifespan) pour la création des tables.
-    *   **`models/`**: Définit les modèles de données SQLAlchemy qui correspondent aux tables de la base de données.
-        *   `user.py`: Modèle SQLAlchemy pour la table `users`.
-    *   **`schemas/`**: Définit les schémas de données Pydantic pour la validation des requêtes et des réponses de l'API.
-        *   `user.py`: Schémas Pydantic pour les utilisateurs (création, en base de données, token).
-    *   **`services/`**: Destiné à contenir des modules pour l'abstraction des appels à des services externes (par exemple, `ai_service.py` qui a été retiré selon la demande).
-    *   **`config.py`**: Gère la configuration de l'application, charge les variables d'environnement.
-    *   **`main.py`**: Le point d'entrée principal de l'application FastAPI, où l'application est initialisée et les routeurs API sont inclus.
-*   **`venv/`**: Environnement virtuel Python pour isoler les dépendances du projet.
-*   **`.env`**: Fichier pour stocker les variables d'environnement sensibles (chaîne de connexion à la base de données, clé secrète JWT).
-*   **`requirements.txt`**: Liste des dépendances Python du projet.
+## Structure du Projet
+*   **`app/`**: Cœur de l'application FastAPI.
+    *   **`api/`**: Contient les routeurs et les endpoints de l'API (`auth.py`, `dashboard.py`).
+    *   **`core/`**: Fonctions de base comme la gestion des mots de passe et des tokens JWT (`security.py`).
+    *   **`db.py`**: Configuration de la connexion à la base de données **SQLite** avec SQLAlchemy.
+    *   **`mongodb.py`**: Configuration de la connexion à la base de données **MongoDB** avec Motor.
+    *   **`models/`**: Modèles de tables SQLAlchemy (ex: `user.py`).
+    *   **`schemas/`**: Schémas Pydantic pour la validation des données (`user.py`, `dashboard.py`).
+    *   **`config.py`**: Chargement de la configuration depuis les variables d'environnement.
+    *   **`main.py`**: Point d'entrée de l'application, initialise FastAPI et les connexions aux bases de données.
+*   **`scripts/`**: Contient des scripts utilitaires.
+    *   **`seed_db.py`**: Script pour peupler la base de données MongoDB à partir des fichiers JSON statiques.
+*   **`venv/`**: Environnement virtuel Python.
+*   **`.env`**: Fichier de configuration local (ignoré par Git).
+*   **`.env.example`**: Fichier d'exemple pour la configuration.
+*   **`requirements.txt`**: Dépendances Python du projet.
 
-## Flux d'Authentification en Profondeur
+## Installation et Utilisation
 
-Le backend implémente un flux d'authentification basé sur les tokens JWT (JSON Web Tokens) et le standard OAuth2 (via `OAuth2PasswordBearer` de FastAPI).
-
-1.  **Inscription (`POST /api/v1/auth/register`)**:
-    *   Un utilisateur envoie son `email` et `password`.
-    *   Le mot de passe est haché en utilisant `bcrypt` (avec troncature à 72 octets pour respecter les contraintes de l'algorithme).
-    *   Un nouvel utilisateur est créé dans la table `users` de la base de données PostgreSQL.
-    *   Retourne les informations de l'utilisateur enregistré (sans le mot de passe haché).
-
-2.  **Connexion (`POST /api/v1/auth/login`)**:
-    *   Un utilisateur envoie son `username` (qui est l'email) et `password` via un formulaire `OAuth2PasswordRequestForm`.
-    *   Le backend vérifie l'email dans la base de données.
-    *   Le mot de passe fourni est vérifié par rapport au mot de passe haché stocké en utilisant `bcrypt`.
-    *   Si les identifiants sont corrects, un token JWT est créé avec l'email de l'utilisateur comme sujet et une date d'expiration.
-    *   Retourne le `access_token` et le `token_type` ("bearer").
-
-3.  **Informations Utilisateur (`GET /api/v1/auth/me`)**:
-    *   Cette route est protégée et nécessite un token JWT valide dans l'en-tête `Authorization: Bearer <token>`.
-    *   Le token est décodé et vérifié.
-    *   L'email de l'utilisateur est extrait du token.
-    *   Les informations de l'utilisateur sont récupérées de la base de données.
-    *   Retourne les informations de l'utilisateur actuellement authentifié.
-
-## Endpoints API
-
-Tous les endpoints sont préfixés par `/api/v1`.
-
-### Authentification (`/api/v1/auth`)
-*   **`POST /api/v1/auth/register`**: Enregistre un nouvel utilisateur.
-    *   **Requête:** `UserCreate` (email, password)
-    *   **Réponse:** `UserInDB` (id, email)
-    *   **Erreurs:** `400 Bad Request` si l'email est déjà enregistré.
-*   **`POST /api/v1/auth/login`**: Connecte un utilisateur et retourne un token d'accès.
-    *   **Requête:** `OAuth2PasswordRequestForm` (username=email, password)
-    *   **Réponse:** `Token` (access_token, token_type)
-    *   **Erreurs:** `401 Unauthorized` si les identifiants sont incorrects.
-*   **`GET /api/v1/auth/me`**: Récupère les informations de l'utilisateur actuellement authentifié.
-    *   **Requête:** Nécessite un en-tête `Authorization: Bearer <token>`
-    *   **Réponse:** `UserInDB` (id, email)
-    *   **Erreurs:** `401 Unauthorized` si le token est invalide ou manquant.
-
-## Schéma de Base de Données
-
-Le backend utilise une base de données PostgreSQL avec la table suivante :
-
-### `users`
-| Colonne         | Type      | Description                               |
-| :-------------- | :-------- | :---------------------------------------- |
-| `id`            | `SERIAL`  | Clé primaire, auto-incrémentée            |
-| `email`         | `VARCHAR` | Adresse email de l'utilisateur, unique, indexée |
-| `hashed_password` | `VARCHAR` | Mot de passe haché de l'utilisateur       |
-
-## Comment Exécuter le Projet
-
-### Prérequis
+### 1. Prérequis
 *   Python 3.9+
-*   PostgreSQL en cours d'exécution et accessible.
-*   Un environnement virtuel Python (recommandé).
+*   Un accès à un cluster MongoDB (par exemple, un compte gratuit sur MongoDB Atlas).
 
-### Étapes d'Installation et d'Exécution
+### 2. Installation
+a. **Clonez le projet** et naviguez dans le dossier du backend :
+   ```bash
+   cd backend
+   ```
 
-1.  **Naviguez vers le répertoire backend :**
-    ```bash
-    cd backend
-    ```
-2.  **Créez et activez un environnement virtuel (si ce n'est pas déjà fait) :**
-    ```bash
-    python3 -m venv venv
-    source venv/bin/activate
-    ```
-3.  **Installez les dépendances Python :**
-    ```bash
-    pip install -r requirements.txt
-    ```
-4.  **Configurez les variables d'environnement :**
-    Créez un fichier `.env` à la racine du répertoire `backend` avec les informations suivantes.
-    *   **`POSTGRES_CONNECTION_STRING`**: La chaîne de connexion à votre base de données PostgreSQL.
-        *   Exemple : `postgresql+asyncpg://user:password@localhost:5432/your_database_name`
-    *   **`SECRET_KEY`**: Une clé secrète forte et aléatoire utilisée pour signer les tokens JWT.
-        *   Exemple : `SECRET_KEY="votre_super_cle_secrete_aleatoire_et_longue"`
-        *   Vous pouvez générer une clé avec `python -c "import secrets; print(secrets.token_urlsafe(32))"`
+b. **Créez et activez un environnement virtuel** :
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate
+   # Sur Windows, utilisez : venv\Scripts\activate
+   ```
 
-    Exemple de fichier `.env` :
-    ```
-    POSTGRES_CONNECTION_STRING="postgresql+asyncpg://mediascan_user:bik123san@localhost:5432/mediascan_db"
-    SECRET_KEY="votre_super_cle_secrete_aleatoire_et_longue"
-    ```
-5.  **Démarrez le serveur Uvicorn :**
-    ```bash
-    uvicorn app.main:app --reload
-    ```
-    Le serveur sera accessible à `http://127.0.0.1:8000`.
+c. **Installez les dépendances** :
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-### Documentation Interactive de l'API
-Une fois le serveur en cours d'exécution, vous pouvez accéder à la documentation interactive de l'API (Swagger UI) à l'adresse :
-[http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+d. **Configurez votre environnement** :
+   Créez un fichier nommé `.env` à la racine du dossier `backend/` en vous basant sur le modèle `.env.example`.
+   ```bash
+   cp .env.example .env
+   ```
+   Ouvrez le fichier `.env` et **modifiez les valeurs suivantes** :
+   *   `MONGO_CONNECTION_STRING`: Remplacez la valeur par votre propre chaîne de connexion MongoDB Atlas.
+   *   `SECRET_KEY`: Remplacez la valeur par une nouvelle clé secrète. Vous pouvez en générer une avec la commande : `python -c "import secrets; print(secrets.token_urlsafe(32))"`
 
-Ceci vous permettra de tester les endpoints d'authentification directement depuis votre navigateur.
+### 3. Remplissage de la Base de Données (Première Utilisation)
+Avant de lancer le serveur, vous devez peupler la base de données MongoDB avec les données d'analyse.
+
+**Important :** Exécutez cette commande depuis la **racine du projet Media-Scan** (le dossier qui contient `frontend/` et `backend/`), et non depuis le dossier `backend/`.
+```bash
+python backend/scripts/seed_db.py
+```
+Ce script va lire les fichiers JSON dans `frontend/media-scan/public/data/` et les insérer dans votre base de données MongoDB.
+
+### 4. Lancement du Serveur
+a. **Assurez-vous d'être dans le dossier `backend/`** et que votre environnement virtuel est activé.
+
+b. **Lancez le serveur Uvicorn** :
+   ```bash
+   uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+   ```
+   *   Le serveur sera accessible à `http://localhost:8000`.
+   *   La base de données d'authentification `media_scan_auth.db` sera automatiquement créée dans le dossier `backend/`.
+
+c. **Créez votre premier compte utilisateur** :
+   Comme la base de données d'authentification est nouvelle, vous devez vous créer un compte via la page "Register" du frontend.
+
+## Endpoints de l'API
+
+Une fois le serveur lancé, la documentation interactive (Swagger UI) est disponible à l'adresse [http://localhost:8000/docs](http://localhost:8000/docs).
+
+### Authentification (`/api/v1`)
+*   `POST /register`: Enregistre un nouvel utilisateur.
+*   `POST /token`: Connecte un utilisateur et retourne un token JWT.
+*   `GET /users/me`: Récupère les informations de l'utilisateur connecté.
+
+### Dashboard (`/api/v1/dashboard`)
+*   `GET /influence-ranking`: Retourne la liste des médias classés par score d'influence.
+*   `GET /alerts`: Retourne une liste combinée des alertes de monitoring et de contenu sensible.
+*   `GET /alerts/sensitive`: Retourne les alertes de contenu sensible, avec un filtre optionnel par catégorie (ex: `?category=toxic`).
+*   `GET /trends`: Retourne les tendances de publication pour tous les médias.
+*   `GET /themes`: Retourne la distribution globale et par média des thèmes.
+*   `GET /media/{media_name}`: Retourne les informations détaillées pour un média spécifique.
+*   `GET /media/compare`: Retourne les informations détaillées pour une liste de médias à comparer (ex: `?media_names=Media1&media_names=Media2`).
