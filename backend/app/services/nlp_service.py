@@ -1,7 +1,7 @@
 import httpx
 from ..config import settings
 
-NLP_API_ENDPOINT = f"{settings.nlp_api_url}/predict/mock"
+NLP_API_ENDPOINT = f"{settings.nlp_api_url}/predict"
 HEALTH_CHECK_URL = f"{settings.nlp_api_url}/health"
 
 async def analyse_text_external(text: str) -> dict:

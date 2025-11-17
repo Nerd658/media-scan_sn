@@ -1,0 +1,38 @@
+export const alerts = [
+  {
+    id: "alert1",
+    type: "Toxicité Élevée",
+    message: "Contenu avec un score de toxicité anormalement élevé détecté.",
+    media: "Le Pays",
+    date: "2025-11-16T14:30:00Z",
+    severity: "Haute",
+    details: "L'article 'Titre de l'article toxique' contient des propos haineux.",
+  },
+  {
+    id: "alert2",
+    type: "Inactivité Média",
+    message: "Le média 'Sidwaya' n'a pas publié de nouvel article depuis 72 heures.",
+    media: "Sidwaya",
+    date: "2025-11-16T10:00:00Z",
+    severity: "Moyenne",
+    details: "Vérifier la source pour d'éventuels problèmes techniques ou éditoriaux.",
+  },
+  {
+    id: "alert3",
+    type: "Sujet Sensible",
+    message: "Détection d'une augmentation des articles sur le thème 'Sécurité' avec un sentiment négatif.",
+    media: "L'Observateur Paalga",
+    date: "2025-11-15T18:00:00Z",
+    severity: "Moyenne",
+    details: "Analyse des tendances pour identifier une potentielle crise.",
+  },
+  {
+    id: "alert4",
+    type: "Toxicité Élevée",
+    message: "Commentaire avec un score de toxicité élevé sur un post de 'Burkina24'.",
+    media: "Burkina24",
+    date: "2025-11-15T09:15:00Z",
+    severity: "Haute",
+    details: "Le commentaire 'Ceci est un commentaire toxique' a été signalé.",
+  },
+];

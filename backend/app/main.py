@@ -1,14 +1,20 @@
 from fastapi import FastAPI
-from .db import lifespan
-from .api import analysis, history, monitoring, stats
+from .api import analysis, history, monitoring, stats, sources # Import the new sources router
+from .db import close_db_connection, connect_to_db
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(
+    title="Media-Scan Backend",
+    description="API pour l'analyse et le monitoring des médias.",
+    version="0.1.0",
+)
 
-app.include_router(analysis.router, prefix="/api/v1")
-app.include_router(history.router, prefix="/api/v1")
-app.include_router(monitoring.router, prefix="/api/v1")
-app.include_router(stats.router, prefix="/api/v1")
+# Event handlers for database connection
+app.add_event_handler("startup", connect_to_db)
+app.add_event_handler("shutdown", close_db_connection)
 
-@app.get("/")
-def read_root():
-    return {"Message": "QG Backend (v5 - Modular)"}
+# Include API routers
+app.include_router(analysis.router, prefix="/analysis", tags=["Analysis"])
+app.include_router(history.router, prefix="/history", tags=["History"])
+app.include_router(monitoring.router, prefix="/monitoring", tags=["Monitoring"])
+app.include_router(stats.router, prefix="/stats", tags=["Stats"])
+app.include_router(sources.router, prefix="/sources", tags=["Sources"]) # Include the new sources router
