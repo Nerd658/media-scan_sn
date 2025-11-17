@@ -16,6 +16,7 @@ import AllMedia from "./pages/AllMedia";
 import AnalysisDetails from "./pages/AnalysisDetails";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
+import ProtectedRoute from "./components/ProtectedRoute"; // Import ProtectedRoute
 
 const router = createBrowserRouter([
   {
@@ -27,44 +28,49 @@ const router = createBrowserRouter([
     element: <RegisterPage />,
   },
   {
-    path: "/",
-    element: <Layout />,
+    element: <ProtectedRoute />, // Protect all routes below this
     children: [
       {
-        index: true,
-        element: <Dashboard />,
-      },
-      {
-        path: "/history",
-        element: <History />,
-      },
-      {
-        path: "/analyze",
-        element: <Analyze />,
-      },
-      {
-        path: "/media/:mediaName",
-        element: <MediaDetails />,
-      },
-      {
-        path: "/alerts",
-        element: <Alerts />,
-      },
-      {
-        path: "/compare-media",
-        element: <MediaComparison />,
-      },
-      {
-        path: "/sources",
-        element: <SourceManagement />,
-      },
-      {
-        path: "/all-media",
-        element: <AllMedia />,
-      },
-      {
-        path: "/analysis/:statType",
-        element: <AnalysisDetails />,
+        path: "/",
+        element: <Layout />,
+        children: [
+          {
+            index: true,
+            element: <Dashboard />,
+          },
+          {
+            path: "/history",
+            element: <History />,
+          },
+          {
+            path: "/analyze",
+            element: <Analyze />,
+          },
+          {
+            path: "/media/:mediaName",
+            element: <MediaDetails />,
+          },
+          {
+            path: "/alerts",
+            element: <Alerts />,
+          },
+          {
+            path: "/compare-media",
+            element: <MediaComparison />,
+          },
+          {
+            path: "/sources",
+            element: <SourceManagement />,
+          },
+          {
+            path: "/all-media",
+            element: <AllMedia />,
+          },
+          {
+            path: "/analysis/:statType",
+            element: <AnalysisDetails />,
+          },
+        ],
       },
     ],
   },

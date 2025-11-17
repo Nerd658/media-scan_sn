@@ -5,7 +5,8 @@ import { useAuth } from '../context/AuthContext';
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { login, isAuthenticated } = useAuth();
+  const [loginError, setLoginError] = useState(null); // Local error state
+  const { login, isAuthenticated, loading, error: authError } = useAuth(); // Get auth error
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -16,9 +17,11 @@ export default function LoginPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 500));
-    login(email, password);
+    setLoginError(null); // Clear previous errors
+    const success = await login(email, password);
+    if (!success) {
+      setLoginError(authError || 'Une erreur est survenue lors de la connexion.');
+    }
   };
 
   return (
@@ -31,6 +34,9 @@ export default function LoginPage() {
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
         <form className="space-y-6" onSubmit={handleSubmit}>
+          {loginError && (
+            <div className="text-red-500 text-center text-sm">{loginError}</div>
+          )}
           <div>
             <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900 dark:text-white">
               Adresse email
@@ -77,9 +83,10 @@ export default function LoginPage() {
           <div>
             <button
               type="submit"
-              className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              disabled={loading} // Disable button during loading
+              className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:opacity-50"
             >
-              Se connecter
+              {loading ? 'Connexion en cours...' : 'Se connecter'}
             </button>
           </div>
         </form>

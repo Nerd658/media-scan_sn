@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext'; // Import useAuth
+import { useAuth } from '../context/AuthContext';
 
 export default function RegisterPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const { isAuthenticated } = useAuth(); // Get isAuthenticated from useAuth
+  const [registerError, setRegisterError] = useState(null); // Local error state
+  const { register, isAuthenticated, loading, error: authError } = useAuth(); // Get auth error
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -17,15 +18,17 @@ export default function RegisterPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setRegisterError(null); // Clear previous errors
     if (password !== confirmPassword) {
-      alert("Les mots de passe ne correspondent pas.");
+      setRegisterError("Les mots de passe ne correspondent pas.");
       return;
     }
-    // Simulate API call delay for registration
-    await new Promise(resolve => setTimeout(resolve, 500));
-    console.log('Registration attempt with:', { email, password });
-    // Simulate successful registration and redirect to login
-    navigate('/login');
+    const success = await register(email, password);
+    if (success) {
+      navigate('/login'); // Redirect to login on successful registration
+    } else {
+      setRegisterError(authError || 'Une erreur est survenue lors de l\'inscription.');
+    }
   };
 
   return (
@@ -38,6 +41,9 @@ export default function RegisterPage() {
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
         <form className="space-y-6" onSubmit={handleSubmit}>
+          {registerError && (
+            <div className="text-red-500 text-center text-sm">{registerError}</div>
+          )}
           <div>
             <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900 dark:text-white">
               Adresse email
@@ -95,9 +101,10 @@ export default function RegisterPage() {
           <div>
             <button
               type="submit"
-              className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              disabled={loading} // Disable button during loading
+              className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:opacity-50"
             >
-              S'inscrire
+              {loading ? 'Inscription en cours...' : 'S\'inscrire'}
             </button>
           </div>
         </form>

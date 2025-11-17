@@ -1,26 +1,32 @@
 from contextlib import asynccontextmanager
-import motor.motor_asyncio
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
+from sqlalchemy.orm import sessionmaker, declarative_base
 from fastapi import FastAPI
 from .config import settings
 
-db = {}
+# SQLAlchemy setup for PostgreSQL
+DATABASE_URL = settings.postgres_connection_string
+engine = create_async_engine(DATABASE_URL, echo=True)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine, class_=AsyncSession)
+Base = declarative_base()
+
+async def get_db():
+    async with SessionLocal() as session:
+        yield session
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    print("Connecting to MongoDB...")
+    print("Connecting to PostgreSQL...")
     try:
-        client = motor.motor_asyncio.AsyncIOMotorClient(settings.mongo_connection_string)
-        await client.admin.command('ping')
-        db["client"] = client
-        db["database"] = client.get_database("media_scan_db")
-        db["analyses_collection"] = db["database"].get_collection("analyses")
-        print("Successfully connected to MongoDB!")
+        # Test connection and create tables
+        async with engine.begin() as conn: # Use engine.begin() for an async transaction
+            await conn.run_sync(Base.metadata.create_all) # Create tables if they don't exist
+        print("Successfully connected to PostgreSQL and ensured tables are created!")
     except Exception as e:
-        print(f"ERROR: Could not connect to MongoDB: {e}")
-        # raise e # You might want to uncomment this in production
+        print(f"ERROR: Could not connect to PostgreSQL: {e}")
+        # Depending on the severity, you might want to re-raise or handle differently
+        # raise e
 
     yield
 
-    if "client" in db:
-        db["client"].close()
-        print("MongoDB connection closed.")
+    print("PostgreSQL connection pool closed.")

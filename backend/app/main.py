@@ -1,20 +1,27 @@
 from fastapi import FastAPI
-from .api import analysis, history, monitoring, stats, sources # Import the new sources router
-from .db import close_db_connection, connect_to_db
+from fastapi.middleware.cors import CORSMiddleware
+from .api import auth
+from .db import lifespan # Import the new lifespan context manager
 
 app = FastAPI(
     title="Media-Scan Backend",
     description="API pour l'analyse et le monitoring des médias.",
     version="0.1.0",
+    lifespan=lifespan # Use the new lifespan context manager
 )
 
-# Event handlers for database connection
-app.add_event_handler("startup", connect_to_db)
-app.add_event_handler("shutdown", close_db_connection)
+origins = [
+    "http://localhost",
+    "http://localhost:5173",  # Assuming your frontend runs on this port
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Include API routers
-app.include_router(analysis.router, prefix="/analysis", tags=["Analysis"])
-app.include_router(history.router, prefix="/history", tags=["History"])
-app.include_router(monitoring.router, prefix="/monitoring", tags=["Monitoring"])
-app.include_router(stats.router, prefix="/stats", tags=["Stats"])
-app.include_router(sources.router, prefix="/sources", tags=["Sources"]) # Include the new sources router
+app.include_router(auth.router, prefix="/api/v1", tags=["Authentication"])
