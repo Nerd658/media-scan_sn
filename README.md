@@ -2,6 +2,7 @@
 
 ## Description
 Le projet Media-Scan est une application complète conçue pour l'analyse et le monitoring des médias. Il offre une interface utilisateur intuitive pour visualiser les scores d'influence des médias, les alertes de contenu, les tendances de publication, et des informations détaillées sur chaque média. L'application est structurée en deux parties principales : un frontend React pour l'interface utilisateur et un backend FastAPI pour la logique métier et la gestion des données.
+<img width="1796" height="987" alt="image" src="https://github.com/user-attachments/assets/c175dc9f-5e92-4152-bd77-785308d395da" />
 
 ## Fonctionnalités Clés
 *   **Authentification Utilisateur :** Inscription et connexion sécurisées.
