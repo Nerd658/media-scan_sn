@@ -6,13 +6,30 @@ Le projet Media-Scan est une application complète conçue pour l'analyse et le 
 
 ## Fonctionnalités Clés
 *   **Authentification Utilisateur :** Inscription et connexion sécurisées.
+*   <img width="1796" height="987" alt="image" src="https://github.com/user-attachments/assets/bb73c12c-523e-4c37-851a-e727fd0c4a85" />
+
 *   **Tableau de Bord (Dashboard) :** Vue d'ensemble des statistiques clés, distribution des thèmes.
+*   
 *   **Tous les Médias :** Liste complète des médias avec leurs scores d'influence.
+*   <img width="1600" height="858" alt="image" src="https://github.com/user-attachments/assets/6e3edbd2-25f3-4d85-8b04-f76fb7a0ebe1" />
+
 *   **Alertes :** Notifications sur les pics d'engagement, l'inactivité et le contenu sensible/toxique.
+*   <img width="1600" height="858" alt="image" src="https://github.com/user-attachments/assets/0e8b728a-966b-4318-b60d-60a9a901949b" />
+
 *   **Historique (Tendances) :** Graphiques montrant l'évolution des publications par média.
+*   <img width="1600" height="858" alt="image" src="https://github.com/user-attachments/assets/78ae65f8-a9ac-4c36-a5e4-709e55df8f79" />
+
 *   **Détails des Médias :** Informations approfondies sur chaque média (scores, thèmes).
+*   <img width="1600" height="858" alt="image" src="https://github.com/user-attachments/assets/ce2116a6-eda3-426a-8b61-3e75de885214" />
+
+*   
 *   **Comparaison de Médias :** Outil pour comparer les performances de plusieurs médias.
+*   <img width="1600" height="858" alt="image" src="https://github.com/user-attachments/assets/88e1765e-4e3f-4034-82e1-f01de6d5f510" />
+
+*   
 *   **Gestion des Sources :** Liste des sources de médias surveillées.
+*   <img width="1600" height="858" alt="image" src="https://github.com/user-attachments/assets/a0a8dc27-cac4-428c-91c2-9ef0843b52d3" />
+
 
 ## Architecture
 L'application Media-Scan suit une architecture client-serveur avec une séparation claire des responsabilités :
