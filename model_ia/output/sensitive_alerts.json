@@ -1,0 +1,602 @@
+[
+    {
+        "comment_id": 199,
+        "post_id": 1143,
+        "media_page": "Parlons de Tout",
+        "comment_text": "Haine à ce groupe",
+        "true_category": "hateful",
+        "model_label_raw": "LABEL_2",
+        "model_score": 0.320979505777359,
+        "model_label": "hateful"
+    },
+    {
+        "comment_id": 720,
+        "post_id": 427,
+        "media_page": "Libre Info",
+        "comment_text": "N'écoutez pas, c'est pour vous faire peur.",
+        "true_category": "misinfo",
+        "model_label_raw": "LABEL_3",
+        "model_score": 0.29972222447395325,
+        "model_label": "misinfo"
+    },
+    {
+        "comment_id": 474,
+        "post_id": 1941,
+        "media_page": "Minute.bf",
+        "comment_text": "Elle est où la vidéo complète ?",
+        "true_category": "adult",
+        "model_label_raw": "LABEL_4",
+        "model_score": 0.41295957565307617,
+        "model_label": "adult"
+    },
+    {
+        "comment_id": 522,
+        "post_id": 944,
+        "media_page": "Sidwaya",
+        "comment_text": "C'est à cause de [ethnie] tout ça",
+        "true_category": "hateful",
+        "model_label_raw": "LABEL_2",
+        "model_score": 0.299869567155838,
+        "model_label": "hateful"
+    },
+    {
+        "comment_id": 649,
+        "post_id": 126,
+        "media_page": "Sidwaya",
+        "comment_text": "Retournez chez vous",
+        "true_category": "hateful",
+        "model_label_raw": "LABEL_2",
+        "model_score": 0.3289893865585327,
+        "model_label": "hateful"
+    },
+    {
+        "comment_id": 792,
+        "post_id": 1230,
+        "media_page": "Radars Info Burkina",
+        "comment_text": "C'est un complot du gouvernement",
+        "true_category": "misinfo",
+        "model_label_raw": "LABEL_3",
+        "model_score": 0.3235059082508087,
+        "model_label": "misinfo"
+    },
+    {
+        "comment_id": 253,
+        "post_id": 1026,
+        "media_page": "Libre Info",
+        "comment_text": "Arrêtez de nous distraire",
+        "true_category": "toxic",
+        "model_label_raw": "LABEL_1",
+        "model_score": 0.2978179454803467,
+        "model_label": "toxic"
+    },
+    {
+        "comment_id": 327,
+        "post_id": 1373,
+        "media_page": "RTB",
+        "comment_text": "C'est un idiot",
+        "true_category": "toxic",
+        "model_label_raw": "LABEL_1",
+        "model_score": 0.28661057353019714,
+        "model_label": "toxic"
+    },
+    {
+        "comment_id": 25,
+        "post_id": 1209,
+        "media_page": "Burkina24",
+        "comment_text": "La vidéo est truquée, c'est visible.",
+        "true_category": "misinfo",
+        "model_label_raw": "LABEL_3",
+        "model_score": 0.3197847008705139,
+        "model_label": "misinfo"
+    },
+    {
+        "comment_id": 987,
+        "post_id": 1780,
+        "media_page": "Burkina24",
+        "comment_text": "Vous êtes nuls",
+        "true_category": "toxic",
+        "model_label_raw": "LABEL_1",
+        "model_score": 0.3003617227077484,
+        "model_label": "toxic"
+    },
+    {
+        "comment_id": 1423,
+        "post_id": 309,
+        "media_page": "RTB",
+        "comment_text": "Elle provoque, c'est tout.",
+        "true_category": "adult",
+        "model_label_raw": "LABEL_4",
+        "model_score": 0.31179410219192505,
+        "model_label": "adult"
+    },
+    {
+        "comment_id": 495,
+        "post_id": 834,
+        "media_page": "BF1 TV",
+        "comment_text": "Vous n'avez honte ?",
+        "true_category": "toxic",
+        "model_label_raw": "LABEL_1",
+        "model_score": 0.2854233980178833,
+        "model_label": "toxic"
+    },
+    {
+        "comment_id": 1234,
+        "post_id": 1895,
+        "media_page": "AIB",
+        "comment_text": "Ces gens sont le problème",
+        "true_category": "hateful",
+        "model_label_raw": "LABEL_2",
+        "model_score": 0.3277556598186493,
+        "model_label": "hateful"
+    },
+    {
+        "comment_id": 1210,
+        "post_id": 117,
+        "media_page": "Libre Info",
+        "comment_text": "Le vaccin tue les gens",
+        "true_category": "misinfo",
+        "model_label_raw": "LABEL_3",
+        "model_score": 0.2836405634880066,
+        "model_label": "misinfo"
+    },
+    {
+        "comment_id": 459,
+        "post_id": 275,
+        "media_page": "Minute.bf",
+        "comment_text": "Envoie ton 06 [numéro].",
+        "true_category": "adult",
+        "model_label_raw": "LABEL_4",
+        "model_score": 0.32657545804977417,
+        "model_label": "adult"
+    },
+    {
+        "comment_id": 732,
+        "post_id": 401,
+        "media_page": "Libre Info",
+        "comment_text": "Il faut leur régler leur compte.",
+        "true_category": "hateful",
+        "model_label_raw": "LABEL_2",
+        "model_score": 0.3537851572036743,
+        "model_label": "hateful"
+    },
+    {
+        "comment_id": 640,
+        "post_id": 263,
+        "media_page": "Sidwaya",
+        "comment_text": "C'est excitant",
+        "true_category": "adult",
+        "model_label_raw": "LABEL_4",
+        "model_score": 0.30215170979499817,
+        "model_label": "adult"
+    },
+    {
+        "comment_id": 604,
+        "post_id": 1302,
+        "media_page": "Minute.bf",
+        "comment_text": "Il faut les brûler",
+        "true_category": "hateful",
+        "model_label_raw": "LABEL_2",
+        "model_score": 0.3847917914390564,
+        "model_label": "hateful"
+    },
+    {
+        "comment_id": 180,
+        "post_id": 1746,
+        "media_page": "Minute.bf",
+        "comment_text": "Propagande occidentale",
+        "true_category": "misinfo",
+        "model_label_raw": "LABEL_3",
+        "model_score": 0.3143966794013977,
+        "model_label": "misinfo"
+    },
+    {
+        "comment_id": 653,
+        "post_id": 804,
+        "media_page": "AIB",
+        "comment_text": "Encore un article pour endormir le peuple.",
+        "true_category": "toxic",
+        "model_label_raw": "LABEL_3",
+        "model_score": 0.3044931888580322,
+        "model_label": "misinfo"
+    },
+    {
+        "comment_id": 1041,
+        "post_id": 565,
+        "media_page": "Minute.bf",
+        "comment_text": "Envoie ton 06 [numéro].",
+        "true_category": "adult",
+        "model_label_raw": "LABEL_4",
+        "model_score": 0.32657545804977417,
+        "model_label": "adult"
+    },
+    {
+        "comment_id": 1382,
+        "post_id": 1156,
+        "media_page": "Minute.bf",
+        "comment_text": "Qu'ils partent !",
+        "true_category": "hateful",
+        "model_label_raw": "LABEL_2",
+        "model_score": 0.3831521272659302,
+        "model_label": "hateful"
+    },
+    {
+        "comment_id": 1243,
+        "post_id": 274,
+        "media_page": "Parlons de Tout",
+        "comment_text": "C'est excitant",
+        "true_category": "adult",
+        "model_label_raw": "LABEL_4",
+        "model_score": 0.30215170979499817,
+        "model_label": "adult"
+    },
+    {
+        "comment_id": 1411,
+        "post_id": 538,
+        "media_page": "AIB",
+        "comment_text": "C'est faux ! Mon cousin qui est là-bas a dit le contraire.",
+        "true_category": "misinfo",
+        "model_label_raw": "LABEL_3",
+        "model_score": 0.32293203473091125,
+        "model_label": "misinfo"
+    },
+    {
+        "comment_id": 798,
+        "post_id": 536,
+        "media_page": "Radars Info Burkina",
+        "comment_text": "Punition pour eux",
+        "true_category": "hateful",
+        "model_label_raw": "LABEL_2",
+        "model_score": 0.32992982864379883,
+        "model_label": "hateful"
+    },
+    {
+        "comment_id": 1116,
+        "post_id": 1340,
+        "media_page": "Burkina24",
+        "comment_text": "Elle cherche quoi habillée comme ça",
+        "true_category": "adult",
+        "model_label_raw": "LABEL_4",
+        "model_score": 0.41262364387512207,
+        "model_label": "adult"
+    },
+    {
+        "comment_id": 1367,
+        "post_id": 1607,
+        "media_page": "RTB",
+        "comment_text": "Ce n'est pas vrai",
+        "true_category": "misinfo",
+        "model_label_raw": "LABEL_3",
+        "model_score": 0.32767850160598755,
+        "model_label": "misinfo"
+    },
+    {
+        "comment_id": 8,
+        "post_id": 508,
+        "media_page": "Radars Info Burkina",
+        "comment_text": "Montre plus !",
+        "true_category": "adult",
+        "model_label_raw": "LABEL_4",
+        "model_score": 0.41709598898887634,
+        "model_label": "adult"
+    },
+    {
+        "comment_id": 477,
+        "post_id": 1334,
+        "media_page": "BF1 TV",
+        "comment_text": "Envoie ton 06 [numéro].",
+        "true_category": "adult",
+        "model_label_raw": "LABEL_4",
+        "model_score": 0.32657545804977417,
+        "model_label": "adult"
+    },
+    {
+        "comment_id": 49,
+        "post_id": 1450,
+        "media_page": "Minute.bf",
+        "comment_text": "Elle est bonne",
+        "true_category": "adult",
+        "model_label_raw": "LABEL_4",
+        "model_score": 0.42631980776786804,
+        "model_label": "adult"
+    },
+    {
+        "comment_id": 0,
+        "post_id": 830,
+        "media_page": "Burkina24",
+        "comment_text": "Mort à ces gens",
+        "true_category": "hateful",
+        "model_label_raw": "LABEL_2",
+        "model_score": 0.34774094820022583,
+        "model_label": "hateful"
+    },
+    {
+        "comment_id": 696,
+        "post_id": 371,
+        "media_page": "Sidwaya",
+        "comment_text": "J'aimerais être à la place du gars.",
+        "true_category": "adult",
+        "model_label_raw": "LABEL_4",
+        "model_score": 0.4252927303314209,
+        "model_label": "adult"
+    },
+    {
+        "comment_id": 835,
+        "post_id": 1761,
+        "media_page": "BF1 TV",
+        "comment_text": "Mon ami qui est militaire a dit le contraire.",
+        "true_category": "misinfo",
+        "model_label_raw": "LABEL_3",
+        "model_score": 0.30098482966423035,
+        "model_label": "misinfo"
+    },
+    {
+        "comment_id": 1085,
+        "post_id": 1570,
+        "media_page": "BF1 TV",
+        "comment_text": "Ils méritent ce qui leur arrive.",
+        "true_category": "hateful",
+        "model_label_raw": "LABEL_2",
+        "model_score": 0.36325040459632874,
+        "model_label": "hateful"
+    },
+    {
+        "comment_id": 1174,
+        "post_id": 161,
+        "media_page": "Minute.bf",
+        "comment_text": "Tu es trop fraîche bébé.",
+        "true_category": "adult",
+        "model_label_raw": "LABEL_4",
+        "model_score": 0.34886234998703003,
+        "model_label": "adult"
+    },
+    {
+        "comment_id": 249,
+        "post_id": 1708,
+        "media_page": "Minute.bf",
+        "comment_text": "C'est toujours les [groupe] qui posent problème.",
+        "true_category": "hateful",
+        "model_label_raw": "LABEL_2",
+        "model_score": 0.33032262325286865,
+        "model_label": "hateful"
+    },
+    {
+        "comment_id": 995,
+        "post_id": 1099,
+        "media_page": "Libre Info",
+        "comment_text": "Ils préparent quelque chose de grave.",
+        "true_category": "misinfo",
+        "model_label_raw": "LABEL_3",
+        "model_score": 0.30842387676239014,
+        "model_label": "misinfo"
+    },
+    {
+        "comment_id": 859,
+        "post_id": 1522,
+        "media_page": "Radars Info Burkina",
+        "comment_text": "N'importe quoi ! Vous mentez !",
+        "true_category": "toxic",
+        "model_label_raw": "LABEL_1",
+        "model_score": 0.3004487454891205,
+        "model_label": "toxic"
+    },
+    {
+        "comment_id": 1289,
+        "post_id": 106,
+        "media_page": "Minute.bf",
+        "comment_text": "Ils mentent sur les chiffres.",
+        "true_category": "misinfo",
+        "model_label_raw": "LABEL_3",
+        "model_score": 0.2957462966442108,
+        "model_label": "misinfo"
+    },
+    {
+        "comment_id": 555,
+        "post_id": 367,
+        "media_page": "Parlons de Tout",
+        "comment_text": "Vous n'avez honte ?",
+        "true_category": "toxic",
+        "model_label_raw": "LABEL_1",
+        "model_score": 0.2854233980178833,
+        "model_label": "toxic"
+    },
+    {
+        "comment_id": 156,
+        "post_id": 1207,
+        "media_page": "RTB",
+        "comment_text": "Sale race",
+        "true_category": "hateful",
+        "model_label_raw": "LABEL_2",
+        "model_score": 0.3169567584991455,
+        "model_label": "hateful"
+    },
+    {
+        "comment_id": 1501,
+        "post_id": 96,
+        "media_page": "AIB",
+        "comment_text": "Vidéos X ?",
+        "true_category": "adult",
+        "model_label_raw": "LABEL_4",
+        "model_score": 0.36472222208976746,
+        "model_label": "adult"
+    },
+    {
+        "comment_id": 1295,
+        "post_id": 1039,
+        "media_page": "Burkina24",
+        "comment_text": "Elle cherche quoi habillée comme ça",
+        "true_category": "adult",
+        "model_label_raw": "LABEL_4",
+        "model_score": 0.41262364387512207,
+        "model_label": "adult"
+    },
+    {
+        "comment_id": 1142,
+        "post_id": 583,
+        "media_page": "RTB",
+        "comment_text": "On vous observe, bande de vauriens.",
+        "true_category": "toxic",
+        "model_label_raw": "LABEL_2",
+        "model_score": 0.2914988100528717,
+        "model_label": "hateful"
+    },
+    {
+        "comment_id": 1105,
+        "post_id": 996,
+        "media_page": "Minute.bf",
+        "comment_text": "Les [groupe] dehors",
+        "true_category": "hateful",
+        "model_label_raw": "LABEL_2",
+        "model_score": 0.3638799786567688,
+        "model_label": "hateful"
+    },
+    {
+        "comment_id": 1107,
+        "post_id": 996,
+        "media_page": "Minute.bf",
+        "comment_text": "La vidéo est un deepfake.",
+        "true_category": "misinfo",
+        "model_label_raw": "LABEL_3",
+        "model_score": 0.3175573945045471,
+        "model_label": "misinfo"
+    },
+    {
+        "comment_id": 299,
+        "post_id": 936,
+        "media_page": "Sidwaya",
+        "comment_text": "C'est un [insulte ethnique]",
+        "true_category": "hateful",
+        "model_label_raw": "LABEL_2",
+        "model_score": 0.2744121849536896,
+        "model_label": "hateful"
+    },
+    {
+        "comment_id": 998,
+        "post_id": 1099,
+        "media_page": "Libre Info",
+        "comment_text": "Fermez la bouche",
+        "true_category": "toxic",
+        "model_label_raw": "LABEL_2",
+        "model_score": 0.25779858231544495,
+        "model_label": "hateful"
+    },
+    {
+        "comment_id": 342,
+        "post_id": 66,
+        "media_page": "Minute.bf",
+        "comment_text": "Ils préparent quelque chose de grave.",
+        "true_category": "misinfo",
+        "model_label_raw": "LABEL_3",
+        "model_score": 0.30842387676239014,
+        "model_label": "misinfo"
+    },
+    {
+        "comment_id": 1424,
+        "post_id": 309,
+        "media_page": "RTB",
+        "comment_text": "C'est un idiot",
+        "true_category": "toxic",
+        "model_label_raw": "LABEL_1",
+        "model_score": 0.28661057353019714,
+        "model_label": "toxic"
+    },
+    {
+        "comment_id": 590,
+        "post_id": 885,
+        "media_page": "Radars Info Burkina",
+        "comment_text": "Elle cherche quoi habillée comme ça",
+        "true_category": "adult",
+        "model_label_raw": "LABEL_4",
+        "model_score": 0.41262364387512207,
+        "model_label": "adult"
+    },
+    {
+        "comment_id": 1071,
+        "post_id": 1142,
+        "media_page": "Libre Info",
+        "comment_text": "C'est à cause de [ethnie] tout ça",
+        "true_category": "hateful",
+        "model_label_raw": "LABEL_2",
+        "model_score": 0.299869567155838,
+        "model_label": "hateful"
+    },
+    {
+        "comment_id": 1270,
+        "post_id": 685,
+        "media_page": "Burkina24",
+        "comment_text": "Vous êtes tous des vendus !",
+        "true_category": "toxic",
+        "model_label_raw": "LABEL_1",
+        "model_score": 0.29970017075538635,
+        "model_label": "toxic"
+    },
+    {
+        "comment_id": 1490,
+        "post_id": 887,
+        "media_page": "Radars Info Burkina",
+        "comment_text": "Encore une manipulation de [pays étranger].",
+        "true_category": "misinfo",
+        "model_label_raw": "LABEL_3",
+        "model_score": 0.3198328912258148,
+        "model_label": "misinfo"
+    },
+    {
+        "comment_id": 171,
+        "post_id": 1777,
+        "media_page": "AIB",
+        "comment_text": "Ce pays est foutu.",
+        "true_category": "toxic",
+        "model_label_raw": "LABEL_1",
+        "model_score": 0.29093560576438904,
+        "model_label": "toxic"
+    },
+    {
+        "comment_id": 585,
+        "post_id": 1604,
+        "media_page": "RTB",
+        "comment_text": "Toujours les mêmes mensonges.",
+        "true_category": "toxic",
+        "model_label_raw": "LABEL_1",
+        "model_score": 0.2815401554107666,
+        "model_label": "toxic"
+    },
+    {
+        "comment_id": 569,
+        "post_id": 1273,
+        "media_page": "Burkina24",
+        "comment_text": "Gouvernement de merde",
+        "true_category": "toxic",
+        "model_label_raw": "LABEL_1",
+        "model_score": 0.3170357346534729,
+        "model_label": "toxic"
+    },
+    {
+        "comment_id": 1408,
+        "post_id": 1623,
+        "media_page": "AIB",
+        "comment_text": "Encore une manipulation de [pays étranger].",
+        "true_category": "misinfo",
+        "model_label_raw": "LABEL_3",
+        "model_score": 0.3198328912258148,
+        "model_label": "misinfo"
+    },
+    {
+        "comment_id": 936,
+        "post_id": 1082,
+        "media_page": "Sidwaya",
+        "comment_text": "Il faut leur régler leur compte.",
+        "true_category": "hateful",
+        "model_label_raw": "LABEL_2",
+        "model_score": 0.3537851572036743,
+        "model_label": "hateful"
+    },
+    {
+        "comment_id": 1137,
+        "post_id": 1792,
+        "media_page": "Parlons de Tout",
+        "comment_text": "Quelle honte",
+        "true_category": "toxic",
+        "model_label_raw": "LABEL_1",
+        "model_score": 0.320801705121994,
+        "model_label": "toxic"
+    }
+]
