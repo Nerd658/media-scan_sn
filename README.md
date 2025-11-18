@@ -16,6 +16,10 @@ Le projet Media-Scan est une application complète conçue pour l'analyse et le 
 *   **Alertes :** Notifications sur les pics d'engagement, l'inactivité et le contenu sensible/toxique.
 *   <img width="1600" height="858" alt="image" src="https://github.com/user-attachments/assets/0e8b728a-966b-4318-b60d-60a9a901949b" />
 
+<img width="1600" height="858" alt="image" src="https://github.com/user-attachments/assets/8d0c22c3-5c14-4c99-848c-74d3a5fb0155" />
+
+
+
 *   **Historique (Tendances) :** Graphiques montrant l'évolution des publications par média.
 *   <img width="1600" height="858" alt="image" src="https://github.com/user-attachments/assets/78ae65f8-a9ac-4c36-a5e4-709e55df8f79" />
 
@@ -29,6 +33,15 @@ Le projet Media-Scan est une application complète conçue pour l'analyse et le 
 *   
 *   **Gestion des Sources :** Liste des sources de médias surveillées.
 *   <img width="1600" height="858" alt="image" src="https://github.com/user-attachments/assets/a0a8dc27-cac4-428c-91c2-9ef0843b52d3" />
+*   **Gestion des contenus toxique **
+*   contenu toxique
+<img width="1600" height="858" alt="image" src="https://github.com/user-attachments/assets/a6ddbc52-bcb1-4cf1-b51a-ce65279cc051" />
+contenue sensible
+<img width="1600" height="858" alt="image" src="https://github.com/user-attachments/assets/bb1d2c7e-64ce-49f4-b763-f1ea803dadfe" />
+
+
+
+ 
 
 
 ## Architecture
