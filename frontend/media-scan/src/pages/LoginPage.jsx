@@ -19,7 +19,7 @@ export default function LoginPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoginError(null);
-    const success = await login(email, password);
+    const success = await login(email.trim(), password);
     if (!success) {
       setLoginError(authError || 'Une erreur est survenue lors de la connexion.');
     }

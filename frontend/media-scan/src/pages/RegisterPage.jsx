@@ -24,7 +24,7 @@ export default function RegisterPage() {
       setRegisterError("Les mots de passe ne correspondent pas.");
       return;
     }
-    const success = await register(email, password);
+    const success = await register(email.trim(), password);
     if (success) {
       navigate('/login');
     } else {

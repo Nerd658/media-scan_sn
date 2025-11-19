@@ -8,20 +8,12 @@ import {
   SunIcon,
   MoonIcon,
   ArrowRightOnRectangleIcon, // Import for logout icon
+  UserGroupIcon, // Import for admin icon
 } from "@heroicons/react/24/outline";
 import { NavLink } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
 import { useAuth } from "../context/AuthContext"; // Import useAuth
 import { useNavigate } from "react-router-dom"; // Import useNavigate
-
-const navigation = [
-  { name: "Dashboard", href: "/", icon: HomeIcon },
-  { name: "Historique", href: "/history", icon: ClockIcon },
-  { name: "Analyser", href: "/analyze", icon: DocumentMagnifyingGlassIcon },
-  { name: "Alertes", href: "/alerts", icon: BellIcon },
-  { name: "Comparaison Médias", href: "/compare-media", icon: ArrowsRightLeftIcon },
-  { name: "Gestion des Sources", href: "/sources", icon: Cog6ToothIcon }, // New navigation item
-];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -29,13 +21,28 @@ function classNames(...classes) {
 
 export default function Sidebar() {
   const { theme, toggleTheme } = useTheme();
-  const { logout } = useAuth(); // Use useAuth to get the logout function
+  const { user, logout } = useAuth(); // Use useAuth to get the logout function and user object
   const navigate = useNavigate(); // Use useNavigate for redirection
 
   const handleLogout = () => {
     logout();
     navigate('/login');
   };
+
+  const baseNavigation = [
+    { name: "Dashboard", href: "/", icon: HomeIcon },
+    { name: "Historique", href: "/history", icon: ClockIcon },
+    { name: "Analyser", href: "/analyze", icon: DocumentMagnifyingGlassIcon },
+    { name: "Alertes", href: "/alerts", icon: BellIcon },
+    { name: "Comparaison Médias", href: "/compare-media", icon: ArrowsRightLeftIcon },
+    { name: "Gestion des Sources", href: "/sources", icon: Cog6ToothIcon },
+  ];
+
+  const adminNavigation = { name: "Administration", href: "/admin", icon: UserGroupIcon };
+
+  const finalNavigation = user && user.role === 'admin'
+    ? [...baseNavigation, adminNavigation]
+    : baseNavigation;
 
   return (
     <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-4">
@@ -52,7 +59,7 @@ export default function Sidebar() {
         <ul role="list" className="flex flex-1 flex-col gap-y-7">
           <li>
             <ul role="list" className="-mx-2 space-y-1">
-              {navigation.map((item) => (
+              {finalNavigation.map((item) => (
                 <li key={item.name}>
                   <NavLink
                     to={item.href}

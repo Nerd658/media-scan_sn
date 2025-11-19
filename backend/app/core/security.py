@@ -3,28 +3,30 @@ from typing import Union, Any
 from jose import jwt, JWTError
 import bcrypt # Import bcrypt directly
 from ..config import settings
+from ..schemas.user import TokenData
 
 # pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto") # No longer needed
 
 SECRET_KEY = settings.secret_key
 ALGORITHM = settings.algorithm
 
-def create_access_token(subject: Union[str, Any], expires_delta: timedelta = None) -> str:
+def create_access_token(subject: Union[str, Any], role: str, expires_delta: timedelta = None) -> str:
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
     else:
         expire = datetime.utcnow() + timedelta(minutes=30) # Default 30 minutes
-    to_encode = {"exp": expire, "sub": str(subject)}
+    to_encode = {"exp": expire, "sub": str(subject), "role": role}
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
-def verify_token(token: str) -> Union[str, None]:
+def verify_token(token: str) -> Union[TokenData, None]:
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        username: str = payload.get("sub")
-        if username is None:
+        email: str = payload.get("sub")
+        role: str = payload.get("role")
+        if email is None or role is None:
             return None
-        return username
+        return TokenData(email=email, role=role)
     except JWTError:
         return None
 

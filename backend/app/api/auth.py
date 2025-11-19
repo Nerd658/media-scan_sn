@@ -8,7 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from ..db import get_db
 from ..models.user import User
-from ..schemas.user import UserCreate, UserInDB, Token, TokenData
+from ..schemas.user import UserCreate, User as UserSchema, Token, TokenData
 from ..core.security import verify_password, get_password_hash, create_access_token, verify_token
 from ..config import settings
 
@@ -34,20 +34,20 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], db: An
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
-    email = verify_token(token)
-    if email is None:
+    token_data = verify_token(token)
+    if token_data is None:
         raise credentials_exception
-    user = await get_user_by_email(db, email)
+    user = await get_user_by_email(db, token_data.email)
     if user is None:
         raise credentials_exception
     return user
 
 async def get_current_active_user(current_user: Annotated[User, Depends(get_current_user)]):
-    # if current_user.disabled: # Example for disabled user check
-    #     raise HTTPException(status_code=400, detail="Inactive user")
+    if not current_user.is_active:
+        raise HTTPException(status_code=400, detail="Inactive user")
     return current_user
 
-@router.post("/register", response_model=UserInDB)
+@router.post("/register", response_model=UserSchema)
 async def register_user(user_in: UserCreate, db: Annotated[AsyncSession, Depends(get_db)]):
     user = await get_user_by_email(db, user_in.email)
     if user:
@@ -71,12 +71,15 @@ async def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm,
             detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
+    if not user.is_active:
+        raise HTTPException(status_code=400, detail="Inactive user")
+        
     access_token_expires = timedelta(minutes=settings.access_token_expire_minutes)
     access_token = create_access_token(
-        subject=user.email, expires_delta=access_token_expires
+        subject=user.email, role=user.role, expires_delta=access_token_expires
     )
     return {"access_token": access_token, "token_type": "bearer"}
 
-@router.get("/me", response_model=UserInDB)
-async def read_users_me(current_user: Annotated[UserInDB, Depends(get_current_active_user)]):
+@router.get("/me", response_model=UserSchema)
+async def read_users_me(current_user: Annotated[User, Depends(get_current_active_user)]):
     return current_user

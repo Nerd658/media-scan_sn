@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, Optional
 from pydantic import BaseModel, EmailStr
 
 class UserBase(BaseModel):
@@ -7,11 +7,13 @@ class UserBase(BaseModel):
 class UserCreate(UserBase):
     password: str
 
-class UserInDB(UserBase):
+class User(UserBase):
     id: int
+    is_active: bool
+    role: str
 
     class Config:
-        from_attributes = True # For SQLAlchemy compatibility
+        from_attributes = True
 
 class Token(BaseModel):
     access_token: str
@@ -19,3 +21,8 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     email: Union[EmailStr, None] = None
+    role: Union[str, None] = None
+
+class UserUpdate(BaseModel):
+    is_active: Optional[bool] = None
+    role: Optional[str] = None

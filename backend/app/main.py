@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
-from .api import auth, dashboard
+from .api import auth, dashboard, admin
 from .db import engine as postgres_engine, Base as PostgresBase
 from .mongodb import connect_to_mongo, close_mongo_connection
 from .models import user
@@ -48,3 +48,4 @@ app.add_middleware(
 # Include API routers
 app.include_router(auth.router, prefix="/api/v1", tags=["Authentication"])
 app.include_router(dashboard.router, prefix="/api/v1/dashboard", tags=["Dashboard"])
+app.include_router(admin.router, prefix="/api/v1", tags=["Admin"])

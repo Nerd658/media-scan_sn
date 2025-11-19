@@ -16,6 +16,7 @@ import AllMedia from "./pages/AllMedia";
 import AnalysisDetails from "./pages/AnalysisDetails";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
+import AdminDashboard from "./pages/AdminDashboard"; // Import AdminDashboard
 import ProtectedRoute from "./components/ProtectedRoute"; // Import ProtectedRoute
 
 const router = createBrowserRouter([
@@ -69,6 +70,10 @@ const router = createBrowserRouter([
           {
             path: "/analysis/:statType",
             element: <AnalysisDetails />,
+          },
+          {
+            path: "/admin", // New Admin Dashboard route
+            element: <ProtectedRoute requiredRole="admin"><AdminDashboard /></ProtectedRoute>,
           },
         ],
       },
