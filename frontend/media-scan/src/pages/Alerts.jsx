@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom"; // Import useLocation
 
 export default function Alerts() {
   const [filterSeverity, setFilterSeverity] = useState("Toutes");
@@ -6,6 +7,8 @@ export default function Alerts() {
   const [allAlerts, setAllAlerts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const location = useLocation(); // Get location object
 
   useEffect(() => {
     const fetchAlerts = async () => {
@@ -51,6 +54,20 @@ export default function Alerts() {
 
         setAllAlerts(processedAlerts);
         setError(null);
+
+        // Read URL parameter for type filter
+        const queryParams = new URLSearchParams(location.search);
+        const typeParam = queryParams.get('type');
+        if (typeParam) {
+          // Ensure the typeParam is one of the valid options, or default to "Toutes"
+          const validTypes = ["Toutes", "Contenu", "Pic d'engagement", "Inactivité"];
+          if (validTypes.includes(typeParam)) {
+            setFilterType(typeParam);
+          } else if (typeParam === "Inactivite") { // Handle potential typo in URL
+            setFilterType("Inactivité");
+          }
+        }
+
       } catch (err) {
         setError(err.message);
         console.error(err);
@@ -60,7 +77,7 @@ export default function Alerts() {
     };
 
     fetchAlerts();
-  }, []);
+  }, [location.search]); // Re-run effect when URL search params change
 
   const filteredAlerts = allAlerts.filter((alert) => {
     const severityMatch = filterSeverity === "Toutes" || alert.severity === filterSeverity;

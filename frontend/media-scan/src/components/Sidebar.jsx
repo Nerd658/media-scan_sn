@@ -31,9 +31,10 @@ export default function Sidebar() {
 
   const baseNavigation = [
     { name: "Dashboard", href: "/", icon: HomeIcon },
-    { name: "Historique", href: "/history", icon: ClockIcon },
+    { name: "Evolution de PUB/JR", href: "/history", icon: ClockIcon },
     { name: "Analyser", href: "/analyze", icon: DocumentMagnifyingGlassIcon },
     { name: "Alertes", href: "/alerts", icon: BellIcon },
+    { name: "Inactivité", href: "/alerts?type=Inactivité", icon: ClockIcon }, // New Inactivity link
     { name: "Comparaison Médias", href: "/compare-media", icon: ArrowsRightLeftIcon },
     { name: "Gestion des Sources", href: "/sources", icon: Cog6ToothIcon },
   ];

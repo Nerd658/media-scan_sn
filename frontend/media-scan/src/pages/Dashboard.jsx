@@ -69,12 +69,13 @@ export default function Dashboard() {
         const sensitiveAlerts = alertsData.filter(alert => alert.comment_text);
         const totalSensible = sensitiveAlerts.length;
         const totalToxiques = sensitiveAlerts.filter(alert => alert.true_category === 'toxic').length;
+        const totalInactivity = alertsData.filter(alert => alert.type && alert.type.toLowerCase() === 'inactivité').length;
 
         setMainStats([
             { name: "Total Analyses", value: totalAnalyses },
             { name: "Contenus Toxiques", value: totalToxiques },
             { name: "Contenu Sensible", value: totalSensible },
-            { name: "Sentiment Positif", value: 'N/A' },
+            { name: "Inactivité", value: totalInactivity },
         ]);
 
         setError(null);
