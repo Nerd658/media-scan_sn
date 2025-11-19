@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 
 export default function Alerts() {
   const [filterSeverity, setFilterSeverity] = useState("Toutes");
+  const [filterType, setFilterType] = useState("Toutes"); // New state for type filter
   const [allAlerts, setAllAlerts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -62,8 +63,11 @@ export default function Alerts() {
   }, []);
 
   const filteredAlerts = allAlerts.filter((alert) => {
-    if (filterSeverity === "Toutes") return true;
-    return alert.severity === filterSeverity;
+    const severityMatch = filterSeverity === "Toutes" || alert.severity === filterSeverity;
+    const typeMatch = filterType === "Toutes" || 
+                      (filterType === "Contenu" && alert.type.startsWith("Contenu")) ||
+                      alert.type === filterType;
+    return severityMatch && typeMatch;
   });
 
   const severityColors = {
@@ -89,23 +93,44 @@ export default function Alerts() {
         </p>
       </div>
 
-      {/* Filter by Severity */}
-      <div className="mb-6 flex items-center gap-x-4">
-        <label htmlFor="severityFilter" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-          Filtrer par sévérité :
-        </label>
-        <select
-          id="severityFilter"
-          name="severityFilter"
-          className="block w-auto rounded-md border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-          value={filterSeverity}
-          onChange={(e) => setFilterSeverity(e.target.value)}
-        >
-          <option>Toutes</option>
-          <option>Haute</option>
-          <option>Moyenne</option>
-          <option>Faible</option>
-        </select>
+      {/* Filters */}
+      <div className="mb-6 flex items-center gap-x-6">
+        {/* Filter by Severity */}
+        <div className="flex items-center gap-x-2">
+          <label htmlFor="severityFilter" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            Sévérité :
+          </label>
+          <select
+            id="severityFilter"
+            name="severityFilter"
+            className="block w-auto rounded-md border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+            value={filterSeverity}
+            onChange={(e) => setFilterSeverity(e.target.value)}
+          >
+            <option>Toutes</option>
+            <option>Haute</option>
+            <option>Moyenne</option>
+            <option>Faible</option>
+          </select>
+        </div>
+        {/* Filter by Type */}
+        <div className="flex items-center gap-x-2">
+          <label htmlFor="typeFilter" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            Type :
+          </label>
+          <select
+            id="typeFilter"
+            name="typeFilter"
+            className="block w-auto rounded-md border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+            value={filterType}
+            onChange={(e) => setFilterType(e.target.value)}
+          >
+            <option>Toutes</option>
+            <option>Contenu</option>
+            <option>Pic d'engagement</option>
+            <option>Inactivité</option>
+          </select>
+        </div>
       </div>
 
       {/* Alerts List */}
@@ -148,7 +173,7 @@ export default function Alerts() {
             ))
           ) : (
             <li className="px-4 py-4 sm:px-6 text-center text-gray-500 dark:text-gray-400">
-              Aucune alerte trouvée pour la sévérité sélectionnée.
+              Aucune alerte trouvée pour les filtres sélectionnés.
             </li>
           )}
         </ul>

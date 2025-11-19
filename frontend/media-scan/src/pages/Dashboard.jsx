@@ -71,10 +71,10 @@ export default function Dashboard() {
         const totalToxiques = sensitiveAlerts.filter(alert => alert.true_category === 'toxic').length;
 
         setMainStats([
-            { name: "Total Analyses", value: totalAnalyses, change: "12.5%", changeType: "increase" },
-            { name: "Contenus Toxiques", value: totalToxiques, change: "2.8%", changeType: "increase" },
-            { name: "Contenu Sensible", value: totalSensible, change: "3.2%", changeType: "increase" },
-            { name: "Sentiment Positif", value: 'N/A', change: "5.4%", changeType: "decrease" },
+            { name: "Total Analyses", value: totalAnalyses },
+            { name: "Contenus Toxiques", value: totalToxiques },
+            { name: "Contenu Sensible", value: totalSensible },
+            { name: "Sentiment Positif", value: 'N/A' },
         ]);
 
         setError(null);
@@ -145,30 +145,34 @@ export default function Dashboard() {
                 </dt>
                 <dd className="flex items-baseline pb-6 sm:pb-7">
                   <p className="text-2xl font-semibold text-gray-900 dark:text-white">{item.value}</p>
-                  <p
-                    className={classNames(
-                      item.changeType === "increase" ? "text-green-600" : "text-red-600",
-                      "ml-2 flex items-baseline text-sm font-semibold"
-                    )}
-                  >
-                    <ArrowUpIcon
+                  {item.change && ( // Conditionally render the change percentage
+                    <p
                       className={classNames(
-                        item.changeType === "increase" ? "self-center" : "self-center transform rotate-180",
-                        "h-5 w-5 flex-shrink-0"
+                        item.changeType === "increase" ? "text-green-600" : "text-red-600",
+                        "ml-2 flex items-baseline text-sm font-semibold"
                       )}
-                      aria-hidden="true"
-                    />
-                    <span className="sr-only"> {item.changeType === "increase" ? "Increased" : "Decreased"} by </span>
-                    {item.change}
-                  </p>
+                    >
+                      <ArrowUpIcon
+                        className={classNames(
+                          item.changeType === "increase" ? "self-center" : "self-center transform rotate-180",
+                          "h-5 w-5 flex-shrink-0"
+                        )}
+                        aria-hidden="true"
+                      />
+                      <span className="sr-only"> {item.changeType === "increase" ? "Increased" : "Decreased"} by </span>
+                      {item.change}
+                    </p>
+                  )}
                   <div className="absolute inset-x-0 bottom-0 bg-gray-50 dark:bg-gray-700/50 px-4 py-4 sm:px-6">
                     <div className="text-sm">
-                      <NavLink
-                        to={`/analysis/${slugify(item.name)}`}
-                        className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300"
-                      >
-                        Voir tout<span className="sr-only"> {item.name} stats</span>
-                      </NavLink>
+                      {item.name !== "Total Analyses" && (
+                        <NavLink
+                          to={`/analysis/${slugify(item.name)}`}
+                          className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300"
+                        >
+                          Voir tout<span className="sr-only"> {item.name} stats</span>
+                        </NavLink>
+                      )}
                     </div>
                   </div>
                 </dd>
