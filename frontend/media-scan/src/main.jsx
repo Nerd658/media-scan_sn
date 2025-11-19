@@ -16,6 +16,7 @@ import AllMedia from "./pages/AllMedia";
 import AnalysisDetails from "./pages/AnalysisDetails";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
+import AllPosts from "./pages/AllPosts"; // Import AllPosts
 import AdminDashboard from "./pages/AdminDashboard"; // Import AdminDashboard
 import ProtectedRoute from "./components/ProtectedRoute"; // Import ProtectedRoute
 
@@ -66,6 +67,10 @@ const router = createBrowserRouter([
           {
             path: "/all-media",
             element: <AllMedia />,
+          },
+          {
+            path: "/all-posts", // New All Posts route
+            element: <AllPosts />,
           },
           {
             path: "/analysis/:statType",

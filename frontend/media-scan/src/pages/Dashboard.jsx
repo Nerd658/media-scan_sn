@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 import { ArrowUpIcon } from "@heroicons/react/20/solid";
-import SentimentPieChart from "../components/charts/SentimentPieChart";
+import JSZip from 'jszip';
+import { saveAs } from 'file-saver';
+
 import ThemeBarChart from "../components/charts/ThemeBarChart";
 import TopMediaTable from "../components/TopMediaTable";
 
@@ -12,14 +12,12 @@ function classNames(...classes) {
 }
 
 export default function Dashboard() {
-  const [dateRange, setDateRange] = useState([null, null]);
-  const [startDate, endDate] = dateRange;
-
   // State for our different data sources
   const [topMediaData, setTopMediaData] = useState(null);
   const [themeDistributionData, setThemeDistributionData] = useState(null);
   const [mainStats, setMainStats] = useState(null);
-  // Sentiment data is still missing from the backend
+  const [recentPosts, setRecentPosts] = useState(null);
+  const [allPosts, setAllPosts] = useState([]); // Store all posts for export
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -29,20 +27,25 @@ export default function Dashboard() {
       try {
         setLoading(true);
 
-        // Fetch all necessary data in parallel from the new API endpoints
-        const [rankingRes, themesRes, alertsRes] = await Promise.all([
+        // Fetch all necessary data in parallel
+        const [rankingRes, themesRes, alertsRes, allPostsRes] = await Promise.all([
           fetch('http://localhost:8000/api/v1/dashboard/influence-ranking'),
           fetch('http://localhost:8000/api/v1/dashboard/themes'),
-          fetch('http://localhost:8000/api/v1/dashboard/alerts')
+          fetch('http://localhost:8000/api/v1/dashboard/alerts'),
+          fetch('/data/all_posts_classified.json') // Fetch the new posts data
         ]);
 
-        if (!rankingRes.ok || !themesRes.ok || !alertsRes.ok) {
-          throw new Error('Failed to fetch dashboard data from API');
+        if (!rankingRes.ok || !themesRes.ok || !alertsRes.ok || !allPostsRes.ok) {
+          throw new Error('Failed to fetch dashboard data');
         }
 
         const rankingData = await rankingRes.json();
         const themesData = await themesRes.json();
         const alertsData = await alertsRes.json();
+        const allPostsData = await allPostsRes.json(); // Get the posts data
+
+        // Set recent posts
+        setRecentPosts(allPostsData.slice(0, 4));
 
         // --- Process Data for TopMediaTable ---
         const articlesPerMedia = {};
@@ -57,7 +60,6 @@ export default function Dashboard() {
         setTopMediaData(processedTopMedia);
 
         // --- Process Data for ThemeBarChart ---
-        // Transform the 'global_themes' array into the key-value object the component expects
         const processedThemes = themesData.global_themes.reduce((acc, theme) => {
           acc[theme.theme] = theme.count;
           return acc;
@@ -65,17 +67,17 @@ export default function Dashboard() {
         setThemeDistributionData(processedThemes);
 
         // --- Process Data for Main Stats Grid ---
-        const totalAnalyses = Object.values(articlesPerMedia).reduce((sum, count) => sum + count, 0);
+        const totalAnalyses = allPostsData.length; // Use the length of the new data
         const sensitiveAlerts = alertsData.filter(alert => alert.comment_text);
         const totalSensible = sensitiveAlerts.length;
         const totalToxiques = sensitiveAlerts.filter(alert => alert.true_category === 'toxic').length;
         const totalInactivity = alertsData.filter(alert => alert.type && alert.type.toLowerCase() === 'inactivité').length;
 
         setMainStats([
-            { name: "Total Analyses", value: totalAnalyses },
-            { name: "Contenus Toxiques", value: totalToxiques },
-            { name: "Contenu Sensible", value: totalSensible },
-            { name: "Inactivité", value: totalInactivity },
+            { name: "Total Analyses", value: totalAnalyses, href: "/all-posts" },
+            { name: "Contenus Toxiques", value: totalToxiques, href: "/analysis/contenus-toxiques" },
+            { name: "Contenu Sensible", value: totalSensible, href: "/analysis/contenu-sensible" },
+            { name: "Inactivité", value: totalInactivity, href: "/alerts?type=Inactivité" },
         ]);
 
         setError(null);
@@ -88,7 +90,7 @@ export default function Dashboard() {
     };
 
     fetchData();
-  }, [dateRange]); // We can add dateRange here later to re-fetch data
+  }, []); // Removed dateRange from dependency array
 
   const slugify = (text) => {
     return text
@@ -97,7 +99,6 @@ export default function Dashboard() {
       .replace(/\s+/g, '-')
       .replace(/[^\w\-]+/g, '')
       .replace(/\-\-+/g, '-')
-      .replace(/^-+/, '')
       .replace(/-+$/, '');
   };
 
@@ -114,17 +115,7 @@ export default function Dashboard() {
       <div className="mb-8 flex justify-between items-center">
         <h1 id="welcome-dashboard" className="text-3xl font-bold leading-tight text-gray-900 dark:text-white">Dashboard</h1>
         <div className="flex items-center space-x-4">
-          <DatePicker
-            selectsRange={true}
-            startDate={startDate}
-            endDate={endDate}
-            onChange={(update) => {
-              setDateRange(update);
-            }}
-            isClearable={true}
-            placeholderText="Filtrer par date"
-            className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          />
+          {/* DatePicker removed */}
         </div>
       </div>
 
@@ -166,9 +157,9 @@ export default function Dashboard() {
                   )}
                   <div className="absolute inset-x-0 bottom-0 bg-gray-50 dark:bg-gray-700/50 px-4 py-4 sm:px-6">
                     <div className="text-sm">
-                      {item.name !== "Total Analyses" && (
+                      {item.href && (
                         <NavLink
-                          to={`/analysis/${slugify(item.name)}`}
+                          to={item.href}
                           className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300"
                         >
                           Voir tout<span className="sr-only"> {item.name} stats</span>
@@ -185,16 +176,40 @@ export default function Dashboard() {
 
       {/* Charts Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-        {/* SentimentPieChart is hidden for now as data is not available from the new source */}
-        {/* <div id="sentiment-chart">
-          <SentimentPieChart data={...} />
-        </div> */}
         {themeDistributionData ? (
           <div id="theme-chart">
             <ThemeBarChart data={themeDistributionData} />
           </div>
         ) : (
           <div className="text-center py-10 text-gray-500">Données de thèmes non disponibles.</div>
+        )}
+
+        {/* Recent Posts List */}
+        {recentPosts ? (
+          <div id="recent-posts">
+            <h2 className="text-lg font-medium text-gray-900 dark:text-white mb-4">Contenus Récents</h2>
+            <div className="bg-white dark:bg-gray-800 shadow overflow-hidden sm:rounded-md">
+              <ul role="list" className="divide-y divide-gray-200 dark:divide-gray-700">
+                {recentPosts.map((post, index) => (
+                  <li key={index} className="px-4 py-4">
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm font-medium text-indigo-600 dark:text-indigo-400 truncate">{post.media}</p>
+                      {post.url && (
+                        <a href={post.url} target="_blank" rel="noopener noreferrer" className="ml-2 text-sm font-medium text-indigo-600 hover:text-indigo-500">
+                          Voir le post
+                        </a>
+                      )}
+                    </div>
+                    <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                      {post.preview}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        ) : (
+          <div className="text-center py-10 text-gray-500">Pas de contenus récents.</div>
         )}
       </div>
 
